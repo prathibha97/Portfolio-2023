@@ -7,7 +7,8 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 export default function Header() {
-  const { activeSection, setActiveSection } = useActiveSection();
+  const { activeSection, setActiveSection, setTimeOfLastClicked } =
+    useActiveSection();
   return (
     <header className='z-[999] relative'>
       <motion.div
@@ -26,7 +27,10 @@ export default function Header() {
               animate={{ y: 0, opacity: 1 }}
             >
               <Link
-                onClick={() => setActiveSection(link.name)}
+                onClick={() => {
+                  setActiveSection(link.name);
+                  setTimeOfLastClicked(Date.now());
+                }}
                 href={link.hash}
                 className={clsx(
                   `flex w-full items-center justify-center py-3 px-3 hover:text-gray-950 transition`,
