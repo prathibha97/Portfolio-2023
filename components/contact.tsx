@@ -19,6 +19,7 @@ export default function Contact() {
       viewport={{
         once: true,
       }}
+      className='mb-28 sm:mb-40 scroll-mt-28'
     >
       <SectionHeading>Contact me</SectionHeading>
 
