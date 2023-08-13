@@ -1,34 +1,78 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# My Portfolio
 
-## Getting Started
+Welcome to my portfolio repository! This space showcases my work, skills, and projects as a software developer. Feel free to explore the code and projects I've been working on.
 
-First, run the development server:
+## About Me
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+I am a dedicated software developer with a strong foundation in javascript full-stack development. I am currently an final year undergraduate student studying Computer Science at Staffordshire University, United Kingdom and am committed to continuous learning and staying updated with the latest industry trends.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Skills
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+I possess a diverse skill set that enables me to contribute effectively to various aspects of software development. Some of the key technologies and tools I'm proficient in include:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- HTML
+- CSS
+- JavaScript
+- TypeScript
+- React
+- Next.js
+- Vue.js
+- Node.js
+- Git
+- Tailwind CSS
+- Prisma
+- MongoDB
+- MySQL
+- Redux
+- Express
+- Framer Motion
+- Docker
+- AWS
 
-## Learn More
+This array of skills equips me to deliver robust solutions and collaborate seamlessly in dynamic development environments.
 
-To learn more about Next.js, take a look at the following resources:
+## Projects
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Explore some of my recent projects that showcase my coding skills and creativity:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Threads Clone
+A powerful social platform built with Next.js, MongoDB, and Tailwind CSS. It offers a seamless user experience with Clerk authentication, nested comments, and community creation/joining.
+**Tags:** React, Next.js, MongoDB, Tailwind, Mongoose, Clerk, webhooks, TypeScript
+[View Project](https://threads-clone-sigma.vercel.app/)
 
-## Deploy on Vercel
+### Messanger Clone
+A fully functional messaging app with real-time messages, group chats, read receipts, and active status.
+**Tags:** React, Next.js, TypeScript, Tailwind, MongoDB, Prisma, NextAuth, Pusher
+[View Project](https://messanger-clone-five.vercel.app/)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Ecommerce Admin CMS
+A comprehensive admin dashboard for managing multiple ecommerce stores, including products, orders, and customer management.
+**Tags:** React, Next.js, MySQL, Prisma, Tailwind, NextAuth, TypeScript
+[View Project](https://ecommerce-admin-pink-gamma.vercel.app/)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Ecommerce Store
+A fully functional ecommerce store featuring cart, checkout, and payment processing capabilities.
+**Tags:** React, Next.js, MySQL, Prisma, Tailwind, Stripe, TypeScript
+[View Project](https://ecommerce-store-three-plum.vercel.app/)
+
+### Airbnb Clone
+An Airbnb clone with map search, date picker, and reservation functionality.
+**Tags:** React, Next.js, MySQL, Prisma, Tailwind, NextAuth, TypeScript
+[View Project](https://threads-clone-sigma.vercel.app/)
+
+
+## Contact
+
+Feel free to get in touch with me:
+
+- Email: prsthibha@gmail.com
+- LinkedIn: https://www.linkedin.com/in/prathibha-ratnayake/
+- Portfolio Website: https://prathibha-portfolio.vercel.app/
+
+## License
+
+This project is licensed under the [MIT](https://choosealicense.com/licenses/mit/) license.
+
+---
+
+Thank you for visiting my portfolio! If you have any questions or would like to collaborate, please feel free to reach out.

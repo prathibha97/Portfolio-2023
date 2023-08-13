@@ -168,24 +168,24 @@ export const projectsData = [
   {
     title: 'Proshop',
     description:
-      'Fully functional ecommerce store with cart, checkout, and payment processing',
-    tags: ['React', 'Firebase', 'Styled Components', '0Auth', 'TypeScript'],
+      'Ecommerce store with cart, checkout, and payment processing and admin dashboard to manage products, orders, and customers',
+    tags: ['React', 'Node.js', 'Express', 'MongoDB', 'Redux', 'paypal', 'Docker'],
     imageUrl: proshopImg,
     link: 'https://proshop-y96f.onrender.com',
   },
   {
     title: 'NASA Mission Control',
     description:
-      'Fully functional ecommerce store with cart, checkout, and payment processing',
-    tags: ['React', 'Firebase', 'Styled Components', '0Auth', 'TypeScript'],
+      'Nasa mission control. Schedule, launch, and track missions to your favorite exoplanets!',
+    tags: ['React', 'MongoDB', 'Express', 'Node.js', 'Docker'],
     imageUrl: nasaImg,
     link: 'https://nasa-a1ji.onrender.com',
   },
   {
     title: 'TikTik, a TikTok Clone',
     description:
-      'Fully functional ecommerce store with cart, checkout, and payment processing',
-    tags: ['React', 'Firebase', 'Styled Components', '0Auth', 'TypeScript'],
+      'Fully functional tiktok clone with video upload, like, comment, and share functionality',
+    tags: ['React', 'Next.js', 'Firebase', 'Tailwind', '0Auth', 'TypeScript'],
     imageUrl: tiktikImg,
     link: 'https://tik-tik-five-kappa.vercel.app/',
   },
