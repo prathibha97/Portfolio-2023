@@ -1,10 +1,16 @@
+import messangerImg from '@/public/assets/images/messanger.png';
+import threadsImg from '@/public/assets/images/threads.png';
+import ecomAdminImg from '@/public/assets/images/ecommerce-admin.png';
+import ecomImg from '@/public/assets/images/ecommerce.png';
+import airbnbImg from '@/public/assets/images/airbnb.png';
+import crownImg from '@/public/assets/images/crown.png';
+import proshopImg from '@/public/assets/images/proshop.png';
+import nasaImg from '@/public/assets/images/nasa.png';
+import tiktikImg from '@/public/assets/images/tiktik.png';
 import React from 'react';
 import { CgWorkAlt } from 'react-icons/cg';
 import { FaReact } from 'react-icons/fa';
 import { LuGraduationCap } from 'react-icons/lu';
-import corpcommentImg from '@/public/assets/images/corpcomment.png';
-import rmtdevImg from '@/public/assets/images/rmtdev.png';
-import wordanalyticsImg from '@/public/assets/images/wordanalytics.png';
 
 export const links = [
   {
@@ -35,52 +41,153 @@ export const links = [
 
 export const experiencesData = [
   {
-    title: 'Graduated bootcamp',
-    location: 'Miami, FL',
+    title: 'Operations Analyst',
+    location: 'Colombo, Sri Lanka',
     description:
-      'I graduated after 6 months of studying. I immediately found a job as a front-end developer.',
-    icon: React.createElement(LuGraduationCap),
-    date: '2019',
-  },
-  {
-    title: 'Front-End Developer',
-    location: 'Orlando, FL',
-    description:
-      'I worked as a front-end developer for 2 years in 1 job and 1 year in another job. I also upskilled to the full stack.',
+      'I worked as a Operations Analyst for 2 years in RCM industry and overlooked accounts receivables in US healthcare sector.',
     icon: React.createElement(CgWorkAlt),
-    date: '2019 - 2021',
+    date: '2021 - 2022',
   },
   {
-    title: 'Full-Stack Developer',
-    location: 'Houston, TX',
+    title: 'Software Engineer Intern',
+    location: 'Kandy, Sri Lanka',
     description:
-      "I'm now a full-stack developer working as a freelancer. My stack includes React, Next.js, TypeScript, Tailwind, Prisma and MongoDB. I'm open to full-time opportunities.",
+      'As a Software Engineer Intern, I aided the Engineering team in software development and debugging. I also upskilled to a full-stack developer, mastering front-end (HTML, CSS, JavaScript) and back-end (Node.js, mongoDB) technologies, enhancing my overall contribution to the team.',
+    icon: React.createElement(CgWorkAlt),
+    date: '2023',
+  },
+  {
+    title: 'Junior Software Engineer',
+    location: 'Kandy, Sri Lanka',
+    description:
+      "I'm currently a Junior Software Engineer specializing in full-stack development. My skill set encompasses technologies such as React, Next.js, TypeScript, Tailwind, Prisma, Node.js and MongoDB. I am also actively seeking full-time opportunities to further enhance my career and contribute my expertise to exciting projects.",
     icon: React.createElement(FaReact),
-    date: '2021 - present',
+    date: '2023 - present',
+  },
+  {
+    title: 'Progressing Towards BSc (Hons) in Computer Science',
+    location: 'Stafforshire University, United Kingdom',
+    description:
+      'Anticipating the year 2024, I am on the verge of completing my journey towards a BSc (Hons) in Computer Science from Staffordshire University, situated in the esteemed United Kingdom.',
+    icon: React.createElement(LuGraduationCap),
+    date: '2024',
   },
 ] as const;
 
 export const projectsData = [
   {
-    title: 'CorpComment',
+    title: 'Threads Clone',
     description:
-      'I worked as a full-stack developer on this startup project for 2 years. Users can give public feedback to companies.',
-    tags: ['React', 'Next.js', 'MongoDB', 'Tailwind', 'Prisma'],
-    imageUrl: corpcommentImg,
+      'Next.js 13, MongoDB, Tailwind CSS. Seamless user experience, Clerk authentication, nested comments, community creation/joining.',
+    tags: [
+      'React',
+      'Next.js',
+      'MongoDB',
+      'Tailwind',
+      'Mongoose',
+      'Clerk',
+      'webhooks',
+      'TypeScript',
+    ],
+    imageUrl: threadsImg,
+    link: 'https://threads-clone-sigma.vercel.app/',
   },
   {
-    title: 'rmtDev',
+    title: 'Messanger Clone',
     description:
-      'Job board for remote developer jobs. I was the front-end developer. It has features like filtering, sorting and pagination.',
-    tags: ['React', 'TypeScript', 'Next.js', 'Tailwind', 'Redux'],
-    imageUrl: rmtdevImg,
+      'Fully functional messaging app with Real-time messages, group chats, read receipts, and active status',
+    tags: [
+      'React',
+      'Next.js',
+      'TypeScript',
+      'Tailwind',
+      'MongoDB',
+      'Prisma',
+      'NextAuth',
+      'Pusher',
+    ],
+    imageUrl: messangerImg,
+    link: 'https://messanger-clone-five.vercel.app/',
   },
   {
-    title: 'Word Analytics',
+    title: 'Ecommerce Admin CMS',
     description:
-      'A public web app for quick analytics on text. It shows word count, character count and social media post limits.',
-    tags: ['React', 'Next.js', 'SQL', 'Tailwind', 'Framer'],
-    imageUrl: wordanalyticsImg,
+      'Fully functional admin dashboard to manage multiple ecommerce stores with products, orders, and customers management',
+    tags: [
+      'React',
+      'Next.js',
+      'MySQL',
+      'Prisma',
+      'Tailwind',
+      'NextAuth',
+      'TypeScript',
+    ],
+    imageUrl: ecomAdminImg,
+    link: 'https://ecommerce-admin-pink-gamma.vercel.app/',
+  },
+  {
+    title: 'Ecommerce Store',
+    description:
+      'Fully functional ecommerce store with cart, checkout, and payment processing',
+    tags: [
+      'React',
+      'Next.js',
+      'MySQL',
+      'Prisma',
+      'Tailwind',
+      'Stripe',
+      'TypeScript',
+    ],
+    imageUrl: ecomImg,
+    link: 'https://ecommerce-store-three-plum.vercel.app/',
+  },
+  {
+    title: 'Airbnb Clone',
+    description:
+      'airbnb clone with map search, date picker, and reservation functionality',
+    tags: [
+      'React',
+      'Next.js',
+      'MySQL',
+      'Prisma',
+      'Tailwind',
+      'NextAuth',
+      'TypeScript',
+    ],
+    imageUrl: airbnbImg,
+    link: 'https://threads-clone-sigma.vercel.app/',
+  },
+  {
+    title: 'Crown Clothing',
+    description:
+      'Fully functional ecommerce store with cart, checkout, and payment processing',
+    tags: ['React', 'Firebase', 'Styled Components', '0Auth', 'TypeScript'],
+    imageUrl: crownImg,
+    link: 'https://brilliant-taffy-591eac.netlify.app/',
+  },
+  {
+    title: 'Proshop',
+    description:
+      'Fully functional ecommerce store with cart, checkout, and payment processing',
+    tags: ['React', 'Firebase', 'Styled Components', '0Auth', 'TypeScript'],
+    imageUrl: proshopImg,
+    link: 'https://proshop-y96f.onrender.com',
+  },
+  {
+    title: 'NASA Mission Control',
+    description:
+      'Fully functional ecommerce store with cart, checkout, and payment processing',
+    tags: ['React', 'Firebase', 'Styled Components', '0Auth', 'TypeScript'],
+    imageUrl: nasaImg,
+    link: 'https://nasa-a1ji.onrender.com',
+  },
+  {
+    title: 'TikTik, a TikTok Clone',
+    description:
+      'Fully functional ecommerce store with cart, checkout, and payment processing',
+    tags: ['React', 'Firebase', 'Styled Components', '0Auth', 'TypeScript'],
+    imageUrl: tiktikImg,
+    link: 'https://tik-tik-five-kappa.vercel.app/',
   },
 ] as const;
 
@@ -91,17 +198,16 @@ export const skillsData = [
   'TypeScript',
   'React',
   'Next.js',
+  'Vue.js',
   'Node.js',
   'Git',
   'Tailwind',
   'Prisma',
   'MongoDB',
+  'MySQL',
   'Redux',
-  'GraphQL',
-  'Apollo',
   'Express',
-  'PostgreSQL',
-  'Python',
-  'Django',
   'Framer Motion',
+  'Docker',
+  'AWS',
 ] as const;

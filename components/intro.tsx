@@ -9,7 +9,7 @@ import { FaGithubSquare } from 'react-icons/fa';
 import { HiDownload } from 'react-icons/hi';
 
 export default function Intro() {
-  const {setActiveSection,setTimeOfLastClicked} = useActiveSection();
+  const { setActiveSection, setTimeOfLastClicked } = useActiveSection();
   const { ref } = useSectionInView('Home', 0.5);
 
   return (
@@ -27,16 +27,16 @@ export default function Intro() {
           >
             <Image
               src='/assets/images/prathibha.jpg'
-              alt=''
-              width={192}
-              height={192}
+              alt='Profile picture of Prathibha'
+              width={292}
+              height={292}
               quality={95}
               priority={true}
-              className='h-24 w-24 rounded-full border-[0.35rem] border-white object-cover shadow-xl'
+              className='h-44 w-44 rounded-full border-[0.35rem] border-white object-cover shadow-xl'
             />
           </motion.div>
           <motion.span
-            className='absolute text-3xl bottom-0 right-0'
+            className='absolute text-3xl bottom-0 right-3'
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{
@@ -56,11 +56,11 @@ export default function Intro() {
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <span className='font-bold'>Hello, I'm Ricardo.</span> I'm a{' '}
+        <span className='font-bold'>Hello, I'm Prathibha.</span> I'm a{' '}
         <span className='font-bold'>full-stack developer</span> with{' '}
-        <span className='font-bold'>8 years</span> of experience. I enjoy
-        building <span className='italic'>sites & apps</span>. My focus is{' '}
-        <span className='underline'>React (Next.js)</span>.
+        <span className='font-bold'>2 years</span> of experience. I enjoy
+        building <span className='italic'>websites & apps</span>. My focus tech stack is{' '}
+        <span className='underline'>MERN stack</span>.
       </motion.h1>
 
       <motion.div
@@ -82,7 +82,6 @@ export default function Intro() {
           Contact me here{' '}
           <BsArrowRight className='opacity-70 group-hover:translate-x-2 transition' />
         </Link>
-
         <a
           className='group bg-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-110 hover:scale-110 active:scale-105 cursor-pointer borderBlack dark:bg-white/10'
           href='/CV.pdf'
@@ -91,22 +90,23 @@ export default function Intro() {
           Download Resume{' '}
           <HiDownload className='opacity-60 group-hover:translate-y-1 transition' />
         </a>
+        <div className='flex gap-x-4'>
+          <a
+            className='bg-white p-4 text-gray-700 flex items-center gap-2 rounded-full outline-none focus:scale-[1.15] hover:scale-[1.15] hover:text-gray-950 active:scale-105 cursor-pointer borderBlack dark:bg-white/10 dark:text-white/60'
+            href='https://linkedin.com/in/prathibha-ratnayake'
+            target='_blank'
+          >
+            <BsLinkedin />
+          </a>
 
-        <a
-          className='bg-white p-4 text-gray-700 flex items-center gap-2 rounded-full outline-none focus:scale-[1.15] hover:scale-[1.15] hover:text-gray-950 active:scale-105 cursor-pointer borderBlack dark:bg-white/10 dark:text-white/60'
-          href='https://linkedin.com'
-          target='_blank'
-        >
-          <BsLinkedin />
-        </a>
-
-        <a
-          className='bg-white p-4 text-gray-700 flex items-center gap-2 rounded-full text-[1.35rem] outline-none focus:scale-[1.15] hover:scale-[1.15] hover:text-gray-950 active:scale-105 cursor-pointer borderBlack dark:bg-white/10 dark:text-white/60'
-          href='https://github.com/prathibha97'
-          target='_blank'
-        >
-          <FaGithubSquare />
-        </a>
+          <a
+            className='bg-white p-4 text-gray-700 flex items-center gap-2 rounded-full text-[1.35rem] outline-none focus:scale-[1.15] hover:scale-[1.15] hover:text-gray-950 active:scale-105 cursor-pointer borderBlack dark:bg-white/10 dark:text-white/60'
+            href='https://github.com/prathibha97'
+            target='_blank'
+          >
+            <FaGithubSquare />
+          </a>
+        </div>
       </motion.div>
     </section>
   );

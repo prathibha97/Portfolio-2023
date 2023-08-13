@@ -18,9 +18,11 @@ export default function About() {
       <SectionHeading>About me</SectionHeading>
 
       <p className='mb-3'>
-        After graduating with a degree in{' '}
-        <span className='font-medium'>Accounting</span>, I decided to pursue my
-        passion for programming. I enrolled in a coding bootcamp and learned{' '}
+        After graduating with a higher national diploma in{' '}
+        <span className='font-medium'>Business Management</span>, I decided to
+        pursue my passion for programming. I am currently a final year
+        undergraduate in <span className='font-medium'>Computer Science</span>{' '}
+        and learning{' '}
         <span className='font-medium'>full-stack web development</span>.{' '}
         <span className='italic'>My favorite part of programming</span> is the
         problem-solving aspect. I <span className='underline'>love</span> the
@@ -36,12 +38,9 @@ export default function About() {
       </p>
 
       <p>
-        <span className='italic'>When I'm not coding</span>, I enjoy playing
-        video games, watching movies, and playing with my dog. I also enjoy{' '}
-        <span className='font-medium'>learning new things</span>. I am currently
-        learning about{' '}
-        <span className='font-medium'>history and philosophy</span>. I'm also
-        learning how to play the guitar.
+        <span className='italic'>When I'm not coding</span>, I enjoy listening
+        to music, watching movies, and playing with my dog. I also enjoy{' '}
+        <span className='font-medium'>learning new things</span>
       </p>
     </motion.section>
   );
