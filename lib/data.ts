@@ -6,6 +6,7 @@ import airbnbImg from '@/public/assets/images/airbnb.png';
 import crownImg from '@/public/assets/images/crown.png';
 import proshopImg from '@/public/assets/images/proshop.png';
 import nasaImg from '@/public/assets/images/nasa.png';
+import emsImg from '@/public/assets/images/ems.png';
 import tiktikImg from '@/public/assets/images/tiktik.png';
 import React from 'react';
 import { CgWorkAlt } from 'react-icons/cg';
@@ -75,6 +76,22 @@ export const experiencesData = [
 ] as const;
 
 export const projectsData = [
+  {
+    title: 'Employee Management System',
+    description:
+      'Next.js 14, MongoDB, Tailwind CSS. Employee management, Leave management, Project management, Payroll management.',
+    tags: [
+      'React',
+      'Next.js',
+      'MongoDB',
+      'Tailwind',
+      'Mongoose',
+      'Next Auth',
+      'TypeScript',
+    ],
+    imageUrl: emsImg,
+    link: 'https://next-ems.vercel.app/',
+  },
   {
     title: 'Threads Clone',
     description:
@@ -169,7 +186,15 @@ export const projectsData = [
     title: 'Proshop',
     description:
       'Ecommerce store with cart, checkout, and payment processing and admin dashboard to manage products, orders, and customers',
-    tags: ['React', 'Node.js', 'Express', 'MongoDB', 'Redux', 'paypal', 'Docker'],
+    tags: [
+      'React',
+      'Node.js',
+      'Express',
+      'MongoDB',
+      'Redux',
+      'paypal',
+      'Docker',
+    ],
     imageUrl: proshopImg,
     link: 'https://proshop-y96f.onrender.com',
   },
