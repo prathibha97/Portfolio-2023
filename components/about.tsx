@@ -18,23 +18,24 @@ export default function About() {
       <SectionHeading>About me</SectionHeading>
 
       <p className='mb-3'>
-        After graduating with a higher national diploma in{' '}
-        <span className='font-medium'>Business Management</span>, I decided to
-        pursue my passion for programming. I am currently a final year
-        undergraduate in <span className='font-medium'>Computer Science</span>{' '}
-        and learning{' '}
-        <span className='font-medium'>full-stack web development</span>.{' '}
-        <span className='italic'>My favorite part of programming</span> is the
-        problem-solving aspect. I <span className='underline'>love</span> the
-        feeling of finally figuring out a solution to a problem. My core stack
-        is{' '}
+        As a Computer Science graduate, I bring a robust skill set and an
+        insatiable passion for technology to the table. My expertise spans a
+        rich array of cutting-edge technologies, including{' '}
         <span className='font-medium'>
-          React, Next.js, Node.js, and MongoDB
-        </span>
-        . I am also familiar with TypeScript and Prisma. I am always looking to
-        learn new technologies. I am currently looking for a{' '}
-        <span className='font-medium'>full-time position</span> as a software
-        developer.
+          Next JS, React, Redux, Node JS, TypeScript, MongoDB, MySQL,
+        </span>{' '}
+        and more. I thrive in the dynamic realm of software development,
+        excelling in{' '}
+        <span className='font-medium'>
+          pinpointing and resolving issues swiftly, ensuring flawless software
+          operation, and optimizing performance to perfection.
+        </span>{' '}
+        Driven by a relentless pursuit of knowledge, I actively engage with
+        emerging technologies, maintaining a proactive stance towards skill
+        enrichment. With a proven track record of delivering superior-quality
+        solutions and an unwavering commitment to innovation, I am fervently
+        motivated to apply my talents and contribute to transformative projects
+        in a new capacity.
       </p>
 
       <p>

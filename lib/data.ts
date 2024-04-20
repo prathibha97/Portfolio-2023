@@ -66,10 +66,10 @@ export const experiencesData = [
     date: '2023 - present',
   },
   {
-    title: 'Progressing Towards BSc (Hons) in Computer Science',
+    title: 'BSc (Hons) in Computer Science Graduate',
     location: 'Stafforshire University, United Kingdom',
     description:
-      'Anticipating the year 2024, I am on the verge of completing my journey towards a BSc (Hons) in Computer Science from Staffordshire University, situated in the esteemed United Kingdom.',
+      'Proudly graduated with a BSc (Hons) in Computer Science from Staffordshire University, located in the esteemed United Kingdom, in the year 2024.',
     icon: React.createElement(LuGraduationCap),
     date: '2024',
   },
@@ -223,6 +223,7 @@ export const skillsData = [
   'TypeScript',
   'React',
   'Next.js',
+  'Nest.js',
   'Vue.js',
   'Node.js',
   'Git',
