@@ -32,7 +32,7 @@ export default function Intro() {
               height={292}
               quality={95}
               priority={true}
-              className='h-44 w-44 rounded-full border-[0.35rem] border-white object-fit shadow-xl'
+              className='h-44 w-44 rounded-full border-[0.35rem] border-white  shadow-xl'
             />
           </motion.div>
           <motion.span
@@ -58,9 +58,9 @@ export default function Intro() {
       >
         <span className='font-bold'>Hello, I'm Prathibha.</span> I'm a{' '}
         <span className='font-bold'>full-stack developer</span> with{' '}
-        <span className='font-bold'>2 years</span> of experience. I enjoy
-        building <span className='italic'>websites & apps</span>. My focus tech stack is{' '}
-        <span className='underline'>MERN stack</span>.
+        <span className='font-bold'>2+ years</span> of experience. I enjoy
+        building <span className='italic'>websites & apps</span>. My focus tech
+        stack is <span className='underline'>MERN stack</span>.
       </motion.h1>
 
       <motion.div

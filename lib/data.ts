@@ -7,6 +7,7 @@ import crownImg from '@/public/assets/images/crown.png';
 import proshopImg from '@/public/assets/images/proshop.png';
 import nasaImg from '@/public/assets/images/nasa.png';
 import emsImg from '@/public/assets/images/ems.png';
+import lingoImg from '@/public/assets/images/lingo.png';
 import tiktikImg from '@/public/assets/images/tiktik.png';
 import React from 'react';
 import { CgWorkAlt } from 'react-icons/cg';
@@ -62,8 +63,8 @@ export const experiencesData = [
     location: 'Kandy, Sri Lanka',
     description:
       "I'm currently a Junior Software Engineer specializing in full-stack development. My skill set encompasses technologies such as React, Next.js, TypeScript, Tailwind, Prisma, Node.js and MongoDB. I am also actively seeking full-time opportunities to further enhance my career and contribute my expertise to exciting projects.",
-    icon: React.createElement(FaReact),
-    date: '2023 - present',
+    icon: React.createElement(CgWorkAlt),
+    date: '2023 - 2024',
   },
   {
     title: 'BSc (Hons) in Computer Science Graduate',
@@ -73,9 +74,34 @@ export const experiencesData = [
     icon: React.createElement(LuGraduationCap),
     date: '2024',
   },
+  {
+    title: 'Software Engineer',
+    location: 'Kandy, Sri Lanka',
+    description:
+      'As a Software Engineer, I continue to advance my expertise in full-stack development, contributing to complex projects and collaborating with cross-functional teams to deliver high-quality software solutions.',
+    icon: React.createElement(CgWorkAlt),
+    date: '2024 - present',
+  },
 ] as const;
 
 export const projectsData = [
+  {
+    title: 'Lingo - Language Guru',
+    description:
+      'Next.js 14, PostgresSQL, Tailwind CSS, Seamless user experience, Clerk authentication, Stripe payment gateway, Admin dashboard.',
+    tags: [
+      'React',
+      'Next.js',
+      'PostgresSQL',
+      'Tailwind',
+      'Clerk',
+      'TypeScript',
+      'Drizzle ORM',
+      'Stripe',
+    ],
+    imageUrl: lingoImg,
+    link: 'https://lingo-lovat.vercel.app/',
+  },
   {
     title: 'Employee Management System',
     description:
