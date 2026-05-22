@@ -1,15 +1,31 @@
 'use client';
 
 import { motion, useMotionValue, useSpring } from 'motion/react';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+type Variant = 'idle' | 'link' | 'view';
+
+/**
+ * Custom cursor — restrained.
+ *
+ *   - Idle: nothing rendered (the system cursor handles everything).
+ *   - Link (any a / button / [data-cursor]): a small amber dot follows
+ *     the cursor at low opacity. No ring, no fill.
+ *   - View ([data-cursor="view"]): the dot stays small and a "view ↗"
+ *     mono label appears just to the right. No giant pill replacing the
+ *     pointer.
+ *
+ *   Suppressed on form fields and on the /writing routes.
+ */
 export default function CustomCursor() {
+  const pathname = usePathname();
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
-  const cursorX = useSpring(x, { stiffness: 350, damping: 28, mass: 0.4 });
-  const cursorY = useSpring(y, { stiffness: 350, damping: 28, mass: 0.4 });
+  const cursorX = useSpring(x, { stiffness: 380, damping: 28, mass: 0.35 });
+  const cursorY = useSpring(y, { stiffness: 380, damping: 28, mass: 0.35 });
 
-  const [variant, setVariant] = useState<'default' | 'link' | 'view' | 'hidden'>('default');
+  const [variant, setVariant] = useState<Variant>('idle');
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
@@ -24,22 +40,29 @@ export default function CustomCursor() {
 
     const updateFromTarget = (target: EventTarget | null) => {
       if (!(target instanceof Element)) {
-        setVariant('default');
+        setVariant('idle');
+        return;
+      }
+      if (target.closest('input, textarea, [contenteditable="true"], select')) {
+        setVariant('idle');
         return;
       }
       const interactive = target.closest('a, button, [data-cursor]');
       if (!interactive) {
-        setVariant('default');
+        setVariant('idle');
         return;
       }
       const ds = (interactive as HTMLElement).dataset.cursor;
       if (ds === 'view') setVariant('view');
-      else if (ds === 'hidden') setVariant('hidden');
+      else if (ds === 'hidden') setVariant('idle');
       else setVariant('link');
     };
 
     const onOver = (e: MouseEvent) => updateFromTarget(e.target);
-    const onLeave = () => x.set(-200);
+    const onLeave = () => {
+      x.set(-200);
+      setVariant('idle');
+    };
 
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseover', onOver);
@@ -53,54 +76,38 @@ export default function CustomCursor() {
   }, [x, y]);
 
   if (!enabled) return null;
+  if (pathname?.startsWith('/writing')) return null;
 
   const isView = variant === 'view';
-  const isLink = variant === 'link';
-  const isHidden = variant === 'hidden';
+  const visible = variant !== 'idle';
 
   return (
-    <>
-      {/* Outer ring */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none fixed left-0 top-0 z-[9999] mix-blend-difference"
-        style={{ x: cursorX, y: cursorY }}
-      >
-        <motion.div
-          animate={{
-            width: isView ? 96 : isLink ? 44 : 28,
-            height: isView ? 96 : isLink ? 44 : 28,
-            opacity: isHidden ? 0 : 1,
-            backgroundColor: isView ? 'rgb(245, 177, 61)' : 'rgba(255,255,255,0)',
-            borderColor: 'rgba(255,255,255,0.85)',
-          }}
-          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          className="-translate-x-1/2 -translate-y-1/2 rounded-full border flex items-center justify-center"
-        >
-          {isView && (
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-bg)]">
-              View
-            </span>
-          )}
-        </motion.div>
-      </motion.div>
+    <motion.div
+      aria-hidden
+      className="pointer-events-none fixed left-0 top-0 z-[9999] flex items-center gap-2"
+      style={{ x: cursorX, y: cursorY }}
+    >
+      {/* Tiny accent dot — sits at the cursor */}
+      <motion.span
+        animate={{
+          opacity: visible ? 1 : 0,
+          scale: isView ? 1.4 : 1,
+        }}
+        transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+        className="block h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--color-accent)]"
+        style={{ boxShadow: '0 0 0 3px rgba(245, 177, 61, 0.15)' }}
+      />
 
-      {/* Inner dot */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none fixed left-0 top-0 z-[9999] mix-blend-difference"
-        style={{ x, y }}
+      {/* "view ↗" label — only on data-cursor="view" */}
+      <motion.span
+        initial={{ opacity: 0, x: -6 }}
+        animate={{ opacity: isView ? 1 : 0, x: isView ? 0 : -6 }}
+        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+        className="-translate-y-1/2 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--color-accent)]"
+        style={{ fontFeatureSettings: "'liga' 0" }}
       >
-        <motion.div
-          animate={{
-            width: isView || isLink ? 0 : 5,
-            height: isView || isLink ? 0 : 5,
-            opacity: isHidden ? 0 : 1,
-          }}
-          transition={{ duration: 0.15 }}
-          className="-translate-x-1/2 -translate-y-1/2 rounded-full bg-white"
-        />
-      </motion.div>
-    </>
+        view <span aria-hidden>↗</span>
+      </motion.span>
+    </motion.div>
   );
 }
