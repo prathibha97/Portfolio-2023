@@ -10,12 +10,11 @@ import {
   Compass,
   Download,
   FileText,
-  Github,
   Home,
-  Linkedin,
   Mail,
-  type LucideIcon,
 } from 'lucide-react';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import type { ComponentType } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
@@ -25,7 +24,7 @@ type CmdItem = {
   label: string;
   hint?: string;
   group: string;
-  icon: LucideIcon;
+  icon: ComponentType<{ className?: string }>;
   action: () => void;
 };
 
@@ -35,11 +34,18 @@ export default function CommandPalette({ onClose }: { onClose: () => void }) {
   const [active, setActive] = useState(0);
 
   const items: CmdItem[] = useMemo(() => {
+    const NAV_ICON: Record<string, ComponentType<{ className?: string }>> = {
+      About: Compass,
+      Work: Briefcase,
+      Stack: Code2,
+      Path: FileText,
+      Contact: Mail,
+    };
     const navItems: CmdItem[] = sectionLinks.map((l, i) => ({
       id: `nav-${i}`,
       label: `Go to ${l.name}`,
       group: 'Navigate',
-      icon: i === 0 ? Briefcase : i === 1 ? Compass : i === 2 ? Code2 : i === 3 ? FileText : Mail,
+      icon: NAV_ICON[l.name] ?? Compass,
       hint: l.hash,
       action: () => {
         router.push(`/${l.hash}`);
@@ -92,7 +98,7 @@ export default function CommandPalette({ onClose }: { onClose: () => void }) {
         id: 'github',
         label: 'GitHub profile',
         group: 'Social',
-        icon: Github,
+        icon: FaGithub,
         action: () => {
           window.open(profile.socials.github, '_blank');
           onClose();
@@ -102,7 +108,7 @@ export default function CommandPalette({ onClose }: { onClose: () => void }) {
         id: 'linkedin',
         label: 'LinkedIn',
         group: 'Social',
-        icon: Linkedin,
+        icon: FaLinkedin,
         action: () => {
           window.open(profile.socials.linkedin, '_blank');
           onClose();
@@ -204,7 +210,7 @@ export default function CommandPalette({ onClose }: { onClose: () => void }) {
                         : 'text-[var(--color-fg-muted)]'
                     )}
                   >
-                    <it.icon className="h-4 w-4" strokeWidth={1.6} />
+                    <it.icon className="h-4 w-4" />
                     <span className="flex-1">{it.label}</span>
                     {it.hint && (
                       <span className="font-mono text-xs text-[var(--color-fg-subtle)]">

@@ -1,7 +1,8 @@
 import LiveClock from '@/components/primitives/live-clock';
 import { profile } from '@/lib/data';
 import pkg from '@/package.json';
-import { Github, Linkedin, Mail } from 'lucide-react';
+import { Mail } from 'lucide-react';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import Link from 'next/link';
 
 function buildInfo() {
@@ -79,12 +80,12 @@ export default function Footer() {
             <ul className="space-y-2 text-sm text-[var(--color-fg-muted)]">
               <li>
                 <a className="inline-flex items-center gap-2 hover:text-[var(--color-fg)] transition-colors" href={profile.socials.github} target="_blank" rel="noreferrer">
-                  <Github className="h-3.5 w-3.5" /> GitHub
+                  <FaGithub className="h-3.5 w-3.5" /> GitHub
                 </a>
               </li>
               <li>
                 <a className="inline-flex items-center gap-2 hover:text-[var(--color-fg)] transition-colors" href={profile.socials.linkedin} target="_blank" rel="noreferrer">
-                  <Linkedin className="h-3.5 w-3.5" /> LinkedIn
+                  <FaLinkedin className="h-3.5 w-3.5" /> LinkedIn
                 </a>
               </li>
               <li>

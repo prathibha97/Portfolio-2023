@@ -3,7 +3,8 @@
 import { profile } from '@/lib/data';
 import { useSectionInView } from '@/lib/hooks';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { ArrowDown, Download, Github, Linkedin, Mail } from 'lucide-react';
+import { ArrowDown, Download, Mail } from 'lucide-react';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { useRef } from 'react';
 import CtaButton from '../primitives/cta-button';
 import Magnetic from '../primitives/magnetic';
@@ -109,7 +110,7 @@ export default function Hero() {
                     aria-label="GitHub"
                     className="grid h-10 w-10 place-items-center rounded-full border border-[var(--color-border)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:border-[var(--color-border-strong)] transition-colors"
                   >
-                    <Github className="h-4 w-4" />
+                    <FaGithub className="h-4 w-4" />
                   </a>
                 </Magnetic>
                 <Magnetic strength={0.4}>
@@ -121,7 +122,7 @@ export default function Hero() {
                     aria-label="LinkedIn"
                     className="grid h-10 w-10 place-items-center rounded-full border border-[var(--color-border)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:border-[var(--color-border-strong)] transition-colors"
                   >
-                    <Linkedin className="h-4 w-4" />
+                    <FaLinkedin className="h-4 w-4" />
                   </a>
                 </Magnetic>
                 <Magnetic strength={0.4}>

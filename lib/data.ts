@@ -32,8 +32,8 @@ export const profile = {
 } as const;
 
 export const navLinks = [
-  { name: 'Work', hash: '#work' },
   { name: 'About', hash: '#about' },
+  { name: 'Work', hash: '#work' },
   { name: 'Stack', hash: '#stack' },
   { name: 'Path', hash: '#path' },
   { name: 'Writing', hash: '/writing' },
@@ -41,8 +41,8 @@ export const navLinks = [
 ] as const;
 
 export const sectionLinks = [
-  { name: 'Work', hash: '#work' },
   { name: 'About', hash: '#about' },
+  { name: 'Work', hash: '#work' },
   { name: 'Stack', hash: '#stack' },
   { name: 'Path', hash: '#path' },
   { name: 'Contact', hash: '#contact' },

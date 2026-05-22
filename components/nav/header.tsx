@@ -1,7 +1,7 @@
 'use client';
 
 import { useActiveSection } from '@/context/active-section-context';
-import { profile, sectionLinks } from '@/lib/data';
+import { navLinks, profile } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react';
 import Link from 'next/link';
@@ -67,14 +67,23 @@ export default function Header() {
               </span>
             </Link>
 
-            {/* Section links */}
+            {/* Nav links — single ordered list (sections + writing route) */}
             <ul className="hidden md:flex items-center gap-1 text-sm">
-              {sectionLinks.map((link) => {
-                const active = isHome && activeSection === link.name;
+              {navLinks.map((link) => {
+                const isRoute = link.hash.startsWith('/');
+                const href = isRoute
+                  ? link.hash
+                  : isHome
+                  ? link.hash
+                  : `/${link.hash}`;
+                const active = isRoute
+                  ? pathname?.startsWith(link.hash) ?? false
+                  : isHome && activeSection === link.name;
+
                 return (
                   <li key={link.hash} className="relative">
                     <Link
-                      href={isHome ? link.hash : `/${link.hash}`}
+                      href={href}
                       data-cursor="link"
                       className={cn(
                         'relative z-10 inline-flex rounded-full px-3 py-1.5 transition-colors duration-300',
@@ -83,13 +92,15 @@ export default function Header() {
                           : 'text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]'
                       )}
                       onClick={() => {
-                        setActiveSection(link.name);
-                        setTimeOfLastClicked(Date.now());
+                        if (!isRoute) {
+                          setActiveSection(link.name as typeof activeSection);
+                          setTimeOfLastClicked(Date.now());
+                        }
                       }}
                     >
                       {link.name}
                     </Link>
-                    {active && (
+                    {active && !isRoute && (
                       <motion.span
                         layoutId="nav-active"
                         transition={{ type: 'spring', stiffness: 380, damping: 30 }}
@@ -99,20 +110,6 @@ export default function Header() {
                   </li>
                 );
               })}
-              <li>
-                <Link
-                  href="/writing"
-                  data-cursor="link"
-                  className={cn(
-                    'relative z-10 inline-flex rounded-full px-3 py-1.5 transition-colors duration-300',
-                    pathname?.startsWith('/writing')
-                      ? 'text-[var(--color-fg)]'
-                      : 'text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]'
-                  )}
-                >
-                  Writing
-                </Link>
-              </li>
             </ul>
 
             {/* Right side: cmd+k */}
