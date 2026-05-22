@@ -36,7 +36,6 @@ export default function PostToc() {
 
     const obs = new IntersectionObserver(
       (entries) => {
-        // Pick the topmost intersecting heading
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
@@ -51,10 +50,7 @@ export default function PostToc() {
   if (headings.length < 2) return null;
 
   return (
-    <nav
-      aria-label="On this page"
-      className="hidden xl:block fixed left-[max(2rem,calc((100vw-80rem)/2-12rem))] top-32 z-20 w-44"
-    >
+    <nav aria-label="On this page" className="w-full">
       <div
         className="label-eyebrow mb-4"
         style={{ fontVariantNumeric: 'tabular-nums' }}
@@ -74,7 +70,7 @@ export default function PostToc() {
                   setActive(h.id);
                 }}
                 className={cn(
-                  'group relative block py-0.5 text-[12.5px] leading-tight transition-colors',
+                  'group relative block py-0.5 text-[12.5px] leading-snug transition-colors',
                   isActive
                     ? 'text-[var(--color-fg)]'
                     : 'text-[var(--color-fg-subtle)] hover:text-[var(--color-fg-muted)]'
