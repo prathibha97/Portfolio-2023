@@ -115,7 +115,7 @@ export default function About() {
 
             <Reveal delay={0.34}>
               <p className="text-[var(--color-fg-muted)] text-[0.95rem] leading-relaxed max-w-prose italic">
-                Off the keyboard: walking the dog, falling into music rabbit-holes, losing
+                Off the keyboard: playing video games, falling into music rabbit-holes, losing
                 evenings to problems that don&apos;t pay me anything.
               </p>
             </Reveal>
