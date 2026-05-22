@@ -5,20 +5,17 @@ import Footer from '@/components/sections/footer';
 import ActiveSectionContextProvider from '@/context/active-section-context';
 import { profile } from '@/lib/data';
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { JetBrains_Mono } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import './globals.css';
 
-const geistSans = Geist({
+// General Sans loads from Fontshare CDN via @import in globals.css.
+// JetBrains Mono comes through next/font for performance + variable axis support.
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  variable: '--font-geist-sans',
+  variable: '--font-jetbrains-mono',
   display: 'swap',
-});
-
-const geistMono = Geist_Mono({
-  subsets: ['latin'],
-  variable: '--font-geist-mono',
-  display: 'swap',
+  weight: ['300', '400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -67,14 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}`}
-      style={
-        {
-          ['--font-sans']: 'var(--font-geist-sans), system-ui, sans-serif',
-          ['--font-mono']: 'var(--font-geist-mono), ui-monospace, monospace',
-          ['--font-display']: 'var(--font-geist-sans), system-ui, sans-serif',
-        } as React.CSSProperties
-      }
+      className={jetbrainsMono.variable}
       suppressHydrationWarning
     >
       <body className="relative antialiased">

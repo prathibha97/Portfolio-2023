@@ -58,32 +58,65 @@ export default function About() {
           <div className="lg:col-span-7 flex flex-col gap-12">
             <Reveal delay={0.1}>
               <p className="font-display text-[clamp(1.5rem,2.5vw,2.25rem)] leading-tight text-[var(--color-fg)]">
-                I started in operations, doing the careful, repeatable work that holds a business
-                together. Then I taught myself to code — nights and weekends, year after year. Today
-                I&apos;m a senior engineer leading some of my organization&apos;s most critical
-                projects, designing enterprise-grade{' '}
-                <em className="text-[var(--color-accent)] not-italic">Go services</em> and full-stack
-                web products that have to be{' '}
+                I started in operations, learned to code at night, and ended up leading engineering
+                on enterprise-grade{' '}
+                <em className="text-[var(--color-accent)] not-italic">Go services</em> that have to
+                be{' '}
                 <em className="text-[var(--color-accent)] not-italic">fast, reliable and built to
                 last</em>.
               </p>
             </Reveal>
 
-            <Reveal delay={0.2}>
-              <p className="text-[var(--color-fg-muted)] text-fluid-body max-w-prose">
-                I&apos;m most useful as a <strong className="text-[var(--color-fg)]">senior generalist </strong>
-                — someone who can carry a product from a Figma frame to a deployed, observed, billable
-                service. I&apos;m happy in <strong className="text-[var(--color-fg)]">Go</strong> or
-                TypeScript; in Docker or a database console; in a Linear ticket or a customer call. I
-                read more than I write, ship more than I commit, and refactor only when it earns its
-                keep.
+            <Reveal delay={0.18}>
+              <p className="text-[var(--color-fg-muted)] text-[1.05rem] leading-relaxed max-w-prose">
+                I&apos;m a <strong className="text-[var(--color-fg)]">senior generalist</strong> —
+                comfortable in Go or TypeScript, in Docker or a database console, in a Linear
+                ticket or a customer call. I ship more than I commit and refactor only when it
+                earns its keep.
               </p>
             </Reveal>
 
-            <Reveal delay={0.3}>
-              <p className="text-[var(--color-fg-muted)] text-fluid-body max-w-prose">
-                When I&apos;m off the keyboard, I&apos;m walking the dog, falling into music
-                rabbit-holes, or losing an evening to a problem that doesn&apos;t pay me anything.
+            {/* Defaults */}
+            <Reveal delay={0.26}>
+              <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/40 p-6 backdrop-blur-sm">
+                <div
+                  className="label-eyebrow mb-4"
+                  style={{ fontVariantNumeric: 'tabular-nums' }}
+                >
+                  // defaults
+                </div>
+                <ol className="space-y-3 text-[var(--color-fg)]">
+                  {[
+                    { num: '01', tech: 'Go', use: 'for services.' },
+                    { num: '02', tech: 'Next.js', use: 'for products.' },
+                    { num: '03', tech: 'Postgres', use: 'for state.' },
+                  ].map((d) => (
+                    <li
+                      key={d.num}
+                      className="grid grid-cols-[2.5rem_1fr] items-baseline gap-3"
+                    >
+                      <span
+                        className="font-mono text-[11px] tracking-[0.2em] text-[var(--color-fg-subtle)]"
+                        style={{ fontVariantNumeric: 'tabular-nums' }}
+                      >
+                        {d.num}
+                      </span>
+                      <span className="text-[1.05rem]">
+                        <strong className="text-[var(--color-accent)] font-medium">
+                          {d.tech}
+                        </strong>{' '}
+                        <span className="text-[var(--color-fg-muted)]">{d.use}</span>
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.34}>
+              <p className="text-[var(--color-fg-muted)] text-[0.95rem] leading-relaxed max-w-prose italic">
+                Off the keyboard: walking the dog, falling into music rabbit-holes, losing
+                evenings to problems that don&apos;t pay me anything.
               </p>
             </Reveal>
 

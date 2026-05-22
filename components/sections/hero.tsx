@@ -9,6 +9,7 @@ import CtaButton from '../primitives/cta-button';
 import Magnetic from '../primitives/magnetic';
 import MeshGradient from '../primitives/mesh-gradient';
 import ScrambleText from '../primitives/scramble-text';
+import HeroSpecPanel from './hero-spec-panel';
 
 export default function Hero() {
   const containerRef = useRef<HTMLElement>(null);
@@ -29,8 +30,8 @@ export default function Hero() {
     >
       <MeshGradient />
 
-      <div className="container-page relative z-10 grid min-h-[100svh] grid-rows-[auto_1fr_auto] gap-12 pt-32 pb-12 md:pt-40">
-        {/* Status pill */}
+      <div className="container-page relative z-10 grid min-h-[100svh] grid-rows-[auto_1fr_auto] gap-10 pt-32 pb-12 md:pt-40">
+        {/* Status pill row */}
         <div className="flex flex-wrap items-center justify-between gap-4 animate-hero-in">
           <div className="glass inline-flex items-center gap-2.5 rounded-full px-3.5 py-1.5">
             <span className="relative grid h-2 w-2 place-items-center">
@@ -48,89 +49,101 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Headline */}
+        {/* Statement + Spec panel */}
         <motion.div
           style={{ y: titleY, opacity: fade }}
-          className="flex flex-col justify-center gap-10"
+          className="grid items-end gap-10 lg:grid-cols-12 lg:gap-12"
         >
-          <p className="label-eyebrow animate-hero-in" style={{ animationDelay: '60ms' }}>
-            <ScrambleText text="— Engineer · Portfolio 2026" />
-          </p>
-
-          <h1 className="text-[clamp(3rem,10.5vw,9.5rem)] font-medium leading-[0.92] tracking-[-0.045em] text-[var(--color-fg)]">
-            <span
-              className="block animate-hero-in-up"
-              style={{ animationDelay: '120ms' }}
+          {/* LEFT — statement */}
+          <div className="lg:col-span-8 flex flex-col gap-8">
+            <p
+              className="label-eyebrow animate-hero-in"
+              style={{ animationDelay: '60ms' }}
             >
-              I build software
-            </span>
-            <span
-              className="block text-[var(--color-fg-subtle)] animate-hero-in-up"
-              style={{ animationDelay: '240ms' }}
+              <ScrambleText text="— Engineer · Portfolio 2026" />
+            </p>
+
+            <h1 className="text-[clamp(2.75rem,9vw,8.5rem)] font-medium leading-[0.92] tracking-[-0.045em] text-[var(--color-fg)]">
+              <span
+                className="block animate-hero-in-up"
+                style={{ animationDelay: '120ms' }}
+              >
+                I build software
+              </span>
+              <span
+                className="block text-[var(--color-fg-subtle)] animate-hero-in-up"
+                style={{ animationDelay: '240ms' }}
+              >
+                that <span className="text-[var(--color-accent)]">ships.</span>
+              </span>
+            </h1>
+
+            <p
+              className="max-w-[34rem] text-[var(--color-fg-muted)] text-[1.02rem] md:text-[1.1rem] leading-relaxed animate-hero-in"
+              style={{ animationDelay: '420ms' }}
             >
-              that <span className="text-[var(--color-accent)]">ships.</span>
-            </span>
-          </h1>
+              I&apos;m <span className="text-[var(--color-fg)]">{profile.shortName}</span> — a
+              senior engineer leading critical projects at my organization, building{' '}
+              <span className="text-[var(--color-fg)]">scalable, performant systems</span> in
+              Go alongside the full-stack work behind them.
+            </p>
 
-          <p
-            className="max-w-[36rem] text-[var(--color-fg-muted)] text-[1.05rem] md:text-[1.15rem] leading-relaxed animate-hero-in"
-            style={{ animationDelay: '420ms' }}
-          >
-            Hi, I&apos;m <span className="text-[var(--color-fg)]">{profile.shortName}</span>{' '}
-            — a senior software engineer based in Sri Lanka, currently leading engineering on
-            key projects at my organization. I work end-to-end with{' '}
-            <span className="text-[var(--color-fg)]">Go, TypeScript, Next.js and Postgres</span>,
-            building <span className="text-[var(--color-fg)]">scalable, performant systems</span>{' '}
-            for production.
-          </p>
+            <div
+              className="flex flex-wrap items-center gap-3 animate-hero-in"
+              style={{ animationDelay: '540ms' }}
+            >
+              <CtaButton href="#contact" variant="primary">
+                Start a project
+              </CtaButton>
+              <CtaButton href={profile.resume} variant="ghost" download icon={<Download className="h-4 w-4" />}>
+                Download résumé
+              </CtaButton>
 
-          <div
-            className="flex flex-wrap items-center gap-3 animate-hero-in"
-            style={{ animationDelay: '540ms' }}
-          >
-            <CtaButton href="#contact" variant="primary">
-              Start a project
-            </CtaButton>
-            <CtaButton href={profile.resume} variant="ghost" download icon={<Download className="h-4 w-4" />}>
-              Download résumé
-            </CtaButton>
-
-            <div className="ml-1 flex items-center gap-1.5">
-              <Magnetic strength={0.4}>
-                <a
-                  href={profile.socials.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  data-cursor="link"
-                  aria-label="GitHub"
-                  className="grid h-10 w-10 place-items-center rounded-full border border-[var(--color-border)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:border-[var(--color-border-strong)] transition-colors"
-                >
-                  <Github className="h-4 w-4" />
-                </a>
-              </Magnetic>
-              <Magnetic strength={0.4}>
-                <a
-                  href={profile.socials.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  data-cursor="link"
-                  aria-label="LinkedIn"
-                  className="grid h-10 w-10 place-items-center rounded-full border border-[var(--color-border)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:border-[var(--color-border-strong)] transition-colors"
-                >
-                  <Linkedin className="h-4 w-4" />
-                </a>
-              </Magnetic>
-              <Magnetic strength={0.4}>
-                <a
-                  href={`mailto:${profile.email}`}
-                  data-cursor="link"
-                  aria-label="Email"
-                  className="grid h-10 w-10 place-items-center rounded-full border border-[var(--color-border)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:border-[var(--color-border-strong)] transition-colors"
-                >
-                  <Mail className="h-4 w-4" />
-                </a>
-              </Magnetic>
+              <div className="ml-1 flex items-center gap-1.5">
+                <Magnetic strength={0.4}>
+                  <a
+                    href={profile.socials.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-cursor="link"
+                    aria-label="GitHub"
+                    className="grid h-10 w-10 place-items-center rounded-full border border-[var(--color-border)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:border-[var(--color-border-strong)] transition-colors"
+                  >
+                    <Github className="h-4 w-4" />
+                  </a>
+                </Magnetic>
+                <Magnetic strength={0.4}>
+                  <a
+                    href={profile.socials.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-cursor="link"
+                    aria-label="LinkedIn"
+                    className="grid h-10 w-10 place-items-center rounded-full border border-[var(--color-border)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:border-[var(--color-border-strong)] transition-colors"
+                  >
+                    <Linkedin className="h-4 w-4" />
+                  </a>
+                </Magnetic>
+                <Magnetic strength={0.4}>
+                  <a
+                    href={`mailto:${profile.email}`}
+                    data-cursor="link"
+                    aria-label="Email"
+                    className="grid h-10 w-10 place-items-center rounded-full border border-[var(--color-border)] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] hover:border-[var(--color-border-strong)] transition-colors"
+                  >
+                    <Mail className="h-4 w-4" />
+                  </a>
+                </Magnetic>
+              </div>
             </div>
+          </div>
+
+          {/* RIGHT — spec panel */}
+          <div
+            className="lg:col-span-4 animate-hero-in"
+            style={{ animationDelay: '360ms' }}
+          >
+            <HeroSpecPanel />
           </div>
         </motion.div>
 
