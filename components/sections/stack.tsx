@@ -116,7 +116,7 @@ export default function Stack() {
           index="03"
           eyebrow="Stack"
           title="The opinions, then the inventory."
-          description="A long list of logos says you've heard of them. A short list of opinions says you've made the call in production."
+          description="Stack opinions before the chip cloud — the choices I default to, what I avoid, and what I only reach for when it earns it."
         />
 
         {/* Opinionated block */}
