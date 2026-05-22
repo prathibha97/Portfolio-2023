@@ -115,12 +115,123 @@ export default function Stack() {
         <SectionHeading
           index="03"
           eyebrow="Stack"
-          title="The tools I reach for, grouped by where they sit."
-          description="I default to TypeScript end-to-end, Postgres for state, and the platform-as-a-service that lets me delete the most code."
+          title="The opinions, then the inventory."
+          description="A long list of logos says you've heard of them. A short list of opinions says you've made the call in production."
         />
 
+        {/* Opinionated block */}
+        <div className="mt-16 grid gap-10 lg:grid-cols-3">
+          <Reveal>
+            <div className="surface-card rounded-2xl p-6 md:p-7 h-full">
+              <div
+                className="label-eyebrow mb-5 text-[var(--color-accent)]"
+                style={{ fontVariantNumeric: 'tabular-nums' }}
+              >
+                // defaults
+              </div>
+              <ul className="space-y-4">
+                {[
+                  { tech: 'Go', use: 'for services.', why: 'Low-latency, easy to deploy, ops-friendly.' },
+                  { tech: 'Next.js', use: 'for products.', why: 'Familiar to teams, ships fast, good DX.' },
+                  { tech: 'Postgres', use: 'for state.', why: 'Covers 90% of shapes; JSONB for the rest.' },
+                ].map((d) => (
+                  <li key={d.tech} className="border-b border-[var(--color-border)] pb-4 last:border-b-0 last:pb-0">
+                    <p className="text-[var(--color-fg)] text-[1.05rem]">
+                      <strong className="text-[var(--color-accent)] font-medium">{d.tech}</strong>{' '}
+                      <span className="text-[var(--color-fg-muted)]">{d.use}</span>
+                    </p>
+                    <p
+                      className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--color-fg-subtle)]"
+                      style={{ letterSpacing: '0.08em' }}
+                    >
+                      → {d.why}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <div className="surface-card rounded-2xl p-6 md:p-7 h-full">
+              <div
+                className="label-eyebrow mb-5"
+                style={{ color: '#ff7a7a', fontVariantNumeric: 'tabular-nums' }}
+              >
+                // avoided (for now)
+              </div>
+              <ul className="space-y-4">
+                {[
+                  { tech: 'Mongo', use: 'for new builds.', why: 'Schemas pay rent.' },
+                  { tech: 'Microservices', use: 'on day one.', why: 'Monoliths until they hurt.' },
+                  { tech: 'Custom auth', use: 'in a hurry.', why: "Use the thing that's been audited." },
+                ].map((d) => (
+                  <li key={d.tech} className="border-b border-[var(--color-border)] pb-4 last:border-b-0 last:pb-0">
+                    <p className="text-[var(--color-fg)] text-[1.05rem]">
+                      <strong className="font-medium" style={{ color: '#ff9999' }}>
+                        {d.tech}
+                      </strong>{' '}
+                      <span className="text-[var(--color-fg-muted)]">{d.use}</span>
+                    </p>
+                    <p
+                      className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--color-fg-subtle)]"
+                      style={{ letterSpacing: '0.08em' }}
+                    >
+                      → {d.why}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.16}>
+            <div className="surface-card rounded-2xl p-6 md:p-7 h-full">
+              <div
+                className="label-eyebrow mb-5 text-[var(--color-signal-live)]"
+                style={{ fontVariantNumeric: 'tabular-nums' }}
+              >
+                // reached for
+              </div>
+              <ul className="space-y-4">
+                {[
+                  { tech: 'Kafka', use: 'when I need a log.', why: 'Not for "just events."' },
+                  { tech: 'gRPC', use: 'between services.', why: 'Typed contracts beat REST.' },
+                  { tech: 'Redis', use: 'when latency hurts.', why: 'Cache, queue, rate-limit.' },
+                ].map((d) => (
+                  <li key={d.tech} className="border-b border-[var(--color-border)] pb-4 last:border-b-0 last:pb-0">
+                    <p className="text-[var(--color-fg)] text-[1.05rem]">
+                      <strong className="font-medium" style={{ color: 'var(--color-signal-live)' }}>
+                        {d.tech}
+                      </strong>{' '}
+                      <span className="text-[var(--color-fg-muted)]">{d.use}</span>
+                    </p>
+                    <p
+                      className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--color-fg-subtle)]"
+                      style={{ letterSpacing: '0.08em' }}
+                    >
+                      → {d.why}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
+        </div>
+
+        {/* The inventory, secondary */}
+        <Reveal delay={0.1} className="mt-24">
+          <div className="flex items-center gap-3 mb-10">
+            <span className="h-px flex-1 bg-[var(--color-border)]" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-[var(--color-fg-subtle)]">
+              // full inventory
+            </span>
+            <span className="h-px flex-1 bg-[var(--color-border)]" />
+          </div>
+        </Reveal>
+
         {/* Categorized grid */}
-        <div className="mt-20 grid gap-12 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
           {Object.entries(stackData).map(([category, items], idx) => (
             <Reveal key={category} delay={0.05 * idx}>
               <div className="group">
