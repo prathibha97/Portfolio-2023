@@ -125,7 +125,7 @@ export default function About() {
               <div className="grid grid-cols-3 divide-x divide-[var(--color-border)] rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/40 backdrop-blur-sm">
                 {profile.stats.map((s) => (
                   <div key={s.label} className="px-5 py-6 text-left">
-                    <div className="font-display text-4xl text-[var(--color-fg)]">{s.value}</div>
+                    <div className="font-display text-4xl text-[var(--color-fg)] tabular">{s.value}</div>
                     <div className="mt-1 text-[11px] uppercase tracking-[0.16em] font-mono text-[var(--color-fg-muted)] leading-snug">
                       {s.label}
                     </div>

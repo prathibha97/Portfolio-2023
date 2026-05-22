@@ -1,3 +1,5 @@
+import PostToc from '@/components/primitives/post-toc';
+import ReadingProgress from '@/components/primitives/reading-progress';
 import { formatDate } from '@/lib/utils';
 import { getAllPosts, getPostBySlug } from '@/lib/writing';
 import { ArrowLeft } from 'lucide-react';
@@ -37,6 +39,8 @@ export default async function WritingPost({ params }: Params) {
 
   return (
     <main className="relative pt-32 pb-32 md:pt-44 md:pb-44">
+      <ReadingProgress />
+      <PostToc />
       <div className="container-page max-w-3xl">
         <Link
           href="/writing"

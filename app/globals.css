@@ -117,6 +117,11 @@
     font-variant-numeric: tabular-nums slashed-zero;
   }
 
+  /* Engineer-grade numeric alignment for any context (stats, prices, times) */
+  .tabular {
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+
   /* Fluid type scale (clamp) */
   .text-fluid-hero {
     font-size: clamp(3rem, 10vw, 9rem);
