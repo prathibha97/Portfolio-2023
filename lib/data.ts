@@ -16,7 +16,7 @@ export const profile = {
   role: 'Senior Software Engineer · Lead Engineer',
   location: 'Kandy, Sri Lanka',
   timezone: 'GMT+5:30',
-  status: 'Open to senior roles — 2026',
+  status: 'Open to senior roles + freelance — 2026',
   email: 'prsthibha@gmail.com',
   resume: '/CV.pdf',
   socials: {

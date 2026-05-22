@@ -1,6 +1,6 @@
 # Portfolio · v2.0 (2026)
 
-Dark, editorial portfolio site for Prathibha Ratnayake — full-stack engineer.
+Dark, editorial portfolio site for Prathibha Ratnayake — **Senior Software Engineer · Lead Engineer** building enterprise-grade Go services and full-stack web products.
 
 ## Stack
 
@@ -8,20 +8,21 @@ Dark, editorial portfolio site for Prathibha Ratnayake — full-stack engineer.
 - **Tailwind CSS v4** (CSS-first config, `@theme` tokens)
 - **Motion 11** (formerly Framer Motion) for animations
 - **Lenis** for smooth scrolling
-- **React Three Fiber + drei** for the hero scene
 - **next-mdx-remote** for the writing system
 - **Resend + React Email** for the contact form
-- **Geist Sans + Geist Mono + Instrument Serif** for typography
+- **General Sans** (Fontshare) for display + body, **JetBrains Mono NL** (ligatures off, tabular numerals) for technical moments
 
 ## Highlights
 
 - Floating glass header with command palette (`⌘K`)
-- Custom cursor with hover-state morphing
-- Magnetic CTAs and social icons
-- Scroll-driven hero parallax and timeline progress fill
-- Bento grid for projects
+- Hero "statement + live spec panel" composition with a ticking local clock
+- Opinionated Stack section — _Defaults · Avoided · Reached for_ — before the full chip inventory
+- Editorial contents-list Projects layout (replacing the bento grid)
+- Path timeline with a scroll-driven progress fill and a visually promoted "Current" entry
+- Custom cursor + magnetic CTAs
+- MDX-powered `/writing` with reading-progress bar and sticky table-of-contents at xl+
+- Live build-info line in the footer (`v · deployed · commit · LK clock`) reading from Vercel env vars
 - Edge-runtime dynamic Open Graph image
-- MDX-powered `/writing` section with reading time, frontmatter, syntax-aware prose
 - Fully accessible, respects `prefers-reduced-motion`
 
 ## Develop
@@ -34,8 +35,12 @@ npm run dev
 Environment variables:
 
 ```bash
-RESEND_API_KEY=...
+RESEND_API_KEY=...                # for the contact form
+NEXT_PUBLIC_COMMIT_SHA=...        # optional, non-Vercel deploy
+NEXT_PUBLIC_BUILD_TIME=...        # optional, non-Vercel deploy
 ```
+
+On Vercel, the build-info line picks up `VERCEL_GIT_COMMIT_SHA` and `VERCEL_GIT_COMMIT_AUTHOR_DATE` automatically.
 
 ## Scripts
 

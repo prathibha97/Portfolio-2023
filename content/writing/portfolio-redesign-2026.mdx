@@ -5,31 +5,49 @@ date: '2026-05-22'
 tags: ['frontend', 'design', 'meta']
 ---
 
-You&apos;re reading this on the second version of my portfolio. The first one shipped in 2023 — Next 13, Tailwind 3, Framer Motion 10 — and lasted almost three years before it started to feel _of its moment_ instead of timeless.
+You&apos;re reading this on the second version of my portfolio. The first one shipped in 2023 — Next 13, Tailwind 3, Framer Motion 10 — and lasted almost three years before it started to feel _of its moment_ instead of timeless. By early 2026 the seams were obvious: dated dependencies, a serif headline that read more aspirational than serious, a layout that looked like every other "designer-engineer" portfolio that year.
 
 This is the brief I gave myself, and what I built.
 
 ## The brief
 
-**Aesthetic:** dark, editorial, premium. The kind of site that says _engineer who reads design books_, not _engineer who installed a template_.
+**Aesthetic:** dark, editorial, austere. The kind of site that says _engineer who reads design books_, not _engineer who installed a template_. No marketing copy, no aspirational stock photos, no purple gradients.
 
-**Stack:** the 2026 default — Next 15, React 19, Tailwind v4, Motion 11. I also added React Three Fiber for the hero scene, Lenis for smooth scroll, and a small MDX-powered writing system (this post is rendered from a file on disk).
+**Stack:** the 2026 default — Next 15, React 19, Tailwind v4 (CSS-first config), Motion 11. Lenis for smooth scroll. A small MDX-powered writing system (this post is rendered from a `.mdx` file on disk).
 
 **Anti-goals:**
 
-- No "I&apos;m available for freelance!" loud banner. Status is a quiet pill.
-- No giant skill cloud with 47 logos. Three categorized groups, that&apos;s it.
+- No loud "AVAILABLE FOR HIRE" banner. I am available — for senior roles and freelance — but the signal lives in a quiet pill, not a billboard.
+- No 47-logo skill cloud. The stack section leads with opinions, the inventory follows.
 - No animation for its own sake. If it doesn&apos;t serve reading or scanning, it&apos;s cut.
 
-## What I&apos;m proud of
+## The path to the current design (and the things I deleted)
 
-- The hero&apos;s scroll-driven parallax on the headline.
-- The bento grid for projects — different sizes guide the eye in priority order.
-- The command palette (try `⌘K`). Engineers will recognize it immediately.
-- The scroll-driven progress fill on the timeline.
+The first pass had a **React Three Fiber blob** in the hero — a distorted icosahedron with a metallic shader. It looked impressive in a still. In a real browser it rendered as a giant white smear that covered the headline on desktop and ate the whole mobile viewport. I cut it. The 500KB of `three.js` saved is real load budget back.
 
-## What I&apos;d still cut if I had to
+The second pass had an **animated mesh gradient** with three drifting amber/violet/mint blobs. Stripe-style, popular in 2024. By 2026 it&apos;s the new lens flare — instantly dates a site. I replaced it with a single fixed amber glow, a quiet vertical grid, and a horizontal hairline scan that drifts down the page. Cooler, more austere, holds up.
 
-The 3D blob. It&apos;s pretty, but it&apos;s 400KB of JavaScript for decoration. If load metrics start to matter, it goes.
+The first cut also used **Geist Sans** for everything. Geist is wonderful, but Vercel made it free in 2024 and now every modern dev site looks the same because of it. I swapped to **General Sans** (Fontshare) for display and body, and **JetBrains Mono NL** (ligatures off, tabular numerals) for the technical moments. The site reads as more designed and less template-y.
 
-> Every portfolio is a quiet argument about how you work. This one argues for restraint.
+**Projects** started as a bento grid — different sized cards, the aesthetic of every dev portfolio in 2024. I replaced it with a magazine-style contents list: numbered index, large left-aligned title, year on the right, a tiny preview thumb that expands on hover. Reads as confident editorial rather than Apple-keynote slide.
+
+## What stayed and earned its keep
+
+- The **command palette** (try `⌘K`). Engineers recognize it immediately.
+- The **scroll-driven progress fill** on the timeline rule.
+- The **floating glass nav** that hardens on scroll.
+
+## What I added in the second pass
+
+- A **live spec panel** in the hero — role, focus, stack, local time (ticking, tabular nums). The headline says what I do; the panel proves it as a small kubectl-describe block. Most portfolios assert; this one shows.
+- An **opinionated stack section** before the chip inventory. Three columns: _Defaults_ (Go for services, Next.js for products, Postgres for state), _Avoided_ (Mongo for new builds, microservices on day one, custom auth in a hurry), _Reached for_ (Kafka, gRPC, Redis — only when they earn it). The full list still lives below, but the opinions are what someone reading should remember.
+- A **build-info line** in the footer — `v2.0.0 · deployed today · commit 3f4a91c · LK 12:14:32`. Tiny signal that the site itself is a real piece of software I maintain.
+- **Reading progress bar** and a **sticky table-of-contents** for posts at xl+ (the bar you see at the top of this page, the chapter list on the left).
+
+## The signature decision
+
+Every portfolio is a quiet argument about how you work. The 2023 version argued for _capability_ — _look at the range of things I can build_. The 2026 version argues for _restraint and opinion_ — _here&apos;s what I actually choose, and why_.
+
+> The thing that makes an engineer easy to trust isn&apos;t the size of their stack chip cloud. It&apos;s the size of their _no_ pile.
+
+If the next iteration of this site comes around in 2028, I hope the bones still hold. The fonts and the blobs are fashion. The rule — _opinions before inventory_ — is the part I want to keep.

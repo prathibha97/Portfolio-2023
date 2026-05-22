@@ -61,7 +61,7 @@ export default function Contact() {
               index="06"
               eyebrow="Contact"
               title="Let's build the thing you've been describing in meetings."
-              description="I'm currently taking new full-stack and platform work. The fastest path to me is a one-paragraph email — or this form."
+              description="I'm open to senior engineering roles in 2026 and actively take freelance / contract work alongside my current role — full-stack web products, Go services, or a focused engineering sprint. The fastest path to me is a one-paragraph email."
             />
 
             <Reveal delay={0.2} className="mt-12">

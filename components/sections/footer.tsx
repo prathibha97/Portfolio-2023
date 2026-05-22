@@ -60,7 +60,7 @@ export default function Footer() {
             </div>
             <p className="mt-3 max-w-md text-sm text-[var(--color-fg-muted)]">
               Senior software engineer based in {profile.location}. Currently leading engineering
-              on critical projects; open to senior roles in 2026.
+              on critical projects; open to senior roles in 2026 and taking freelance / contract work.
             </p>
           </div>
 

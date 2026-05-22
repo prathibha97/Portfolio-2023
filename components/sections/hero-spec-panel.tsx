@@ -38,7 +38,7 @@ export default function HeroSpecPanel() {
     { label: 'focus', value: 'Scalable Go services' },
     { label: 'stack', value: 'Go · TypeScript · Postgres' },
     { label: 'years', value: '6+ shipping software' },
-    { label: 'avail', value: 'Senior roles · 2026' },
+    { label: 'avail', value: 'Senior · freelance · 2026' },
     { label: 'loc', value: `${profile.location.split(',')[0]} (GMT+5:30)` },
     { label: 'time', value: localTime || '—:—:—', mono: true },
   ];
