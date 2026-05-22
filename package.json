@@ -9,6 +9,9 @@
     "lint": "eslint .",
     "type-check": "tsc --noEmit"
   },
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "dependencies": {
     "@react-email/components": "^1.0.12",
     "clsx": "^2.1.1",
