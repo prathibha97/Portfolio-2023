@@ -4,16 +4,54 @@ import { projectsData } from '@/lib/data';
 import { useSectionInView } from '@/lib/hooks';
 import { cn } from '@/lib/utils';
 import { ArrowUpRight } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import Reveal from '../primitives/reveal';
 import SectionHeading from '../primitives/section-heading';
 
 type Project = (typeof projectsData)[number];
 
+const SPRING = { stiffness: 220, damping: 22, mass: 0.5 };
+
 function ProjectRow({ project, index }: { project: Project; index: number }) {
   const [hovered, setHovered] = useState(false);
+  const previewRef = useRef<HTMLDivElement>(null);
+
+  // Tilt driven by cursor position relative to the preview's box.
+  const rotateXRaw = useMotionValue(0);
+  const rotateYRaw = useMotionValue(0);
+  const rotateX = useSpring(rotateXRaw, SPRING);
+  const rotateY = useSpring(rotateYRaw, SPRING);
+  const previewScale = useSpring(useMotionValue(1), SPRING);
+
+  // Layered inner-tilt for a soft parallax (image moves slightly opposite to box).
+  const innerX = useTransform(rotateY, [-12, 12], [10, -10]);
+  const innerY = useTransform(rotateX, [-8, 8], [-8, 8]);
+
+  const onMove = (e: ReactMouseEvent<HTMLAnchorElement>) => {
+    const el = previewRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (e.clientX - cx) / rect.width;
+    const dy = (e.clientY - cy) / rect.height;
+    rotateYRaw.set(Math.max(-12, Math.min(12, dx * 16)));
+    rotateXRaw.set(Math.max(-8, Math.min(8, -dy * 12)));
+  };
+
+  const onEnter = () => {
+    setHovered(true);
+    previewScale.set(2);
+  };
+
+  const onLeave = () => {
+    setHovered(false);
+    rotateXRaw.set(0);
+    rotateYRaw.set(0);
+    previewScale.set(1);
+  };
 
   return (
     <Reveal delay={index * 0.04} y={20}>
@@ -22,8 +60,9 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
         target="_blank"
         rel="noreferrer"
         data-cursor="view"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        onMouseEnter={onEnter}
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
         className={cn(
           'group relative block border-b border-[var(--color-border)] py-7 md:py-9 transition-colors',
           'hover:border-[var(--color-accent)]/50'
@@ -96,25 +135,59 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
             {project.year}
           </div>
 
-          {/* Inset preview */}
-          <div className="hidden md:flex md:col-span-3 justify-end">
+          {/* Preview thumb — fixed footprint, scales/tilts in place */}
+          <div
+            className="hidden md:flex md:col-span-3 justify-end"
+            style={{ perspective: 1000 }}
+          >
             <motion.div
-              animate={{
-                width: hovered ? 160 : 96,
-                height: hovered ? 100 : 60,
+              ref={previewRef}
+              style={{
+                rotateX,
+                rotateY,
+                scale: previewScale,
+                transformStyle: 'preserve-3d',
+                transformOrigin: 'right center',
+                boxShadow: hovered
+                  ? '0 18px 50px -12px rgba(245, 177, 61, 0.30), 0 4px 14px rgba(0, 0, 0, 0.45)'
+                  : '0 2px 8px rgba(0, 0, 0, 0.25)',
               }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="relative overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]"
+              transition={{ boxShadow: { duration: 0.4 } }}
+              className="relative h-20 w-32 overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]"
             >
-              <Image
-                src={project.imageUrl}
-                alt=""
-                fill
-                sizes="160px"
-                className="object-cover object-top"
-                placeholder="blur"
+              <motion.div
+                style={{ x: innerX, y: innerY, scale: 1.08 }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={project.imageUrl}
+                  alt=""
+                  fill
+                  sizes="320px"
+                  className={cn(
+                    'object-cover object-top transition-[filter] duration-500',
+                    hovered
+                      ? 'grayscale-0 brightness-100 saturate-100'
+                      : 'grayscale-[30%] brightness-[0.85] saturate-[85%]'
+                  )}
+                  placeholder="blur"
+                />
+              </motion.div>
+
+              {/* Subtle dark veil → fades away on hover */}
+              <motion.div
+                animate={{ opacity: hovered ? 0 : 0.25 }}
+                transition={{ duration: 0.35 }}
+                className="absolute inset-0 bg-[var(--color-bg)]"
               />
-              <div className="absolute inset-0 bg-[var(--color-bg)]/20" />
+
+              {/* Accent corner tick — only on hover */}
+              <motion.div
+                animate={{ opacity: hovered ? 1 : 0 }}
+                transition={{ duration: 0.25 }}
+                className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"
+                style={{ boxShadow: '0 0 0 3px rgba(245,177,61,0.20)' }}
+              />
             </motion.div>
           </div>
         </div>
