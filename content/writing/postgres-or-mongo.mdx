@@ -1,0 +1,41 @@
+---
+title: 'Postgres or Mongo, and why the answer is almost always Postgres'
+description: 'A pragmatic breakdown of when each database earns its keep — and why I default to Postgres for new product work.'
+date: '2026-02-28'
+tags: ['backend', 'databases', 'postgres', 'mongodb']
+---
+
+Almost every full-stack project I&apos;ve built has a database question at the front of it. Postgres or Mongo? It&apos;s the developer equivalent of "tabs or spaces" — except the wrong answer can cost you a migration nine months in.
+
+Here&apos;s how I actually decide.
+
+## My default: Postgres
+
+For greenfield product work, **I reach for Postgres first**. It&apos;s not because Mongo is bad; it&apos;s because Postgres&apos; surface area covers so many product shapes that I rarely need to switch.
+
+What I get out of the box:
+
+- Real transactions, real foreign keys, real constraints.
+- JSON columns when I genuinely need schemaless.
+- Full-text search good enough to ship before you reach for OpenSearch.
+- A community of tools (Prisma, Drizzle, Kysely, PostgREST) that&apos;s deeper than Mongo&apos;s.
+
+> Schemas aren&apos;t a tax. They&apos;re a contract between your past self and your future self.
+
+## When I&apos;d still pick Mongo
+
+I&apos;m not anti-Mongo. There are shapes where it genuinely wins:
+
+- **High-churn document shapes** where the schema is genuinely fluid (CMS-style content, event payloads).
+- **Realtime apps** with collaborative editing where MongoDB&apos;s Change Streams + Atlas Search are a comfortable stack.
+- **Existing teams** with Mongo expertise. Familiarity beats theoretical optimums.
+
+## The deciding question
+
+When a founder asks me, I ask back one question: _"Does your data have relationships you&apos;d describe with the word `belongs to`?"_
+
+If yes → Postgres.
+If you have to think → Postgres.
+If no → either works, default to whichever your team knows.
+
+That&apos;s the heuristic. Everything else is implementation detail.

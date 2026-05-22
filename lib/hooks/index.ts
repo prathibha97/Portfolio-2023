@@ -1,21 +1,25 @@
-import { useActiveSection } from "@/context/active-section-context";
-import { useEffect } from "react";
-import { useInView } from "react-intersection-observer";
-import { SectionName } from "../types";
+'use client';
 
-export function useSectionInView(sectionName: SectionName, threshold = 0.75) {
-  const { ref, inView } = useInView({
-    threshold
-  });
+import { useActiveSection } from '@/context/active-section-context';
+import type { SectionName } from '@/lib/types';
+import { useInView } from 'motion/react';
+import { useEffect, useRef, type RefObject } from 'react';
+
+export function useSectionInView<T extends HTMLElement = HTMLElement>(
+  sectionName: SectionName,
+  amount: number | 'some' | 'all' = 0.5,
+  externalRef?: RefObject<T | null>
+) {
+  const internalRef = useRef<T>(null);
+  const ref = externalRef ?? internalRef;
+  const inView = useInView(ref, { amount });
   const { setActiveSection, timeOfLastClicked } = useActiveSection();
 
   useEffect(() => {
     if (inView && Date.now() - timeOfLastClicked > 1000) {
       setActiveSection(sectionName);
     }
-  }, [inView, timeOfLastClicked, sectionName]);
+  }, [inView, timeOfLastClicked, sectionName, setActiveSection]);
 
-  return {
-    ref,
-  };
+  return { ref };
 }

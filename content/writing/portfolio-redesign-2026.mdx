@@ -1,0 +1,35 @@
+---
+title: 'Rebuilding this site in 2026'
+description: 'Notes on the stack, the constraints, and the design choices behind the Portfolio v2.0 rebuild.'
+date: '2026-05-22'
+tags: ['frontend', 'design', 'meta']
+---
+
+You&apos;re reading this on the second version of my portfolio. The first one shipped in 2023 — Next 13, Tailwind 3, Framer Motion 10 — and lasted almost three years before it started to feel _of its moment_ instead of timeless.
+
+This is the brief I gave myself, and what I built.
+
+## The brief
+
+**Aesthetic:** dark, editorial, premium. The kind of site that says _engineer who reads design books_, not _engineer who installed a template_.
+
+**Stack:** the 2026 default — Next 15, React 19, Tailwind v4, Motion 11. I also added React Three Fiber for the hero scene, Lenis for smooth scroll, and a small MDX-powered writing system (this post is rendered from a file on disk).
+
+**Anti-goals:**
+
+- No "I&apos;m available for freelance!" loud banner. Status is a quiet pill.
+- No giant skill cloud with 47 logos. Three categorized groups, that&apos;s it.
+- No animation for its own sake. If it doesn&apos;t serve reading or scanning, it&apos;s cut.
+
+## What I&apos;m proud of
+
+- The hero&apos;s scroll-driven parallax on the headline.
+- The bento grid for projects — different sizes guide the eye in priority order.
+- The command palette (try `⌘K`). Engineers will recognize it immediately.
+- The scroll-driven progress fill on the timeline.
+
+## What I&apos;d still cut if I had to
+
+The 3D blob. It&apos;s pretty, but it&apos;s 400KB of JavaScript for decoration. If load metrics start to matter, it goes.
+
+> Every portfolio is a quiet argument about how you work. This one argues for restraint.

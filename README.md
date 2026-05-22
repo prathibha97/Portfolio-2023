@@ -1,78 +1,51 @@
-# My Portfolio
+# Portfolio · v2.0 (2026)
 
-Welcome to my portfolio repository! This space showcases my work, skills, and projects as a software developer. Feel free to explore the code and projects I've been working on.
+Dark, editorial portfolio site for Prathibha Ratnayake — full-stack engineer.
 
-## About Me
+## Stack
 
-I am a dedicated software developer with a strong foundation in javascript full-stack development. I am currently an final year undergraduate student studying Computer Science at Staffordshire University, United Kingdom and am committed to continuous learning and staying updated with the latest industry trends.
+- **Next.js 15** (App Router) · **React 19** · **TypeScript 5.7**
+- **Tailwind CSS v4** (CSS-first config, `@theme` tokens)
+- **Motion 11** (formerly Framer Motion) for animations
+- **Lenis** for smooth scrolling
+- **React Three Fiber + drei** for the hero scene
+- **next-mdx-remote** for the writing system
+- **Resend + React Email** for the contact form
+- **Geist Sans + Geist Mono + Instrument Serif** for typography
 
-## Skills
+## Highlights
 
-I possess a diverse skill set that enables me to contribute effectively to various aspects of software development. Some of the key technologies and tools I'm proficient in include:
+- Floating glass header with command palette (`⌘K`)
+- Custom cursor with hover-state morphing
+- Magnetic CTAs and social icons
+- Scroll-driven hero parallax and timeline progress fill
+- Bento grid for projects
+- Edge-runtime dynamic Open Graph image
+- MDX-powered `/writing` section with reading time, frontmatter, syntax-aware prose
+- Fully accessible, respects `prefers-reduced-motion`
 
-- HTML
-- CSS
-- JavaScript
-- TypeScript
-- React
-- Next.js
-- Vue.js
-- Node.js
-- Git
-- Tailwind CSS
-- Prisma
-- MongoDB
-- MySQL
-- Redux
-- Express
-- Framer Motion
-- Docker
-- AWS
+## Develop
 
-This array of skills equips me to deliver robust solutions and collaborate seamlessly in dynamic development environments.
+```bash
+npm install
+npm run dev
+```
 
-## Projects
+Environment variables:
 
-Explore some of my recent projects that showcase my coding skills and creativity:
+```bash
+RESEND_API_KEY=...
+```
 
-### Threads Clone
-A powerful social platform built with Next.js, MongoDB, and Tailwind CSS. It offers a seamless user experience with Clerk authentication, nested comments, and community creation/joining.
-**Tags:** React, Next.js, MongoDB, Tailwind, Mongoose, Clerk, webhooks, TypeScript
-[View Project](https://threads-clone-sigma.vercel.app/)
+## Scripts
 
-### Messanger Clone
-A fully functional messaging app with real-time messages, group chats, read receipts, and active status.
-**Tags:** React, Next.js, TypeScript, Tailwind, MongoDB, Prisma, NextAuth, Pusher
-[View Project](https://messanger-clone-five.vercel.app/)
-
-### Ecommerce Admin CMS
-A comprehensive admin dashboard for managing multiple ecommerce stores, including products, orders, and customer management.
-**Tags:** React, Next.js, MySQL, Prisma, Tailwind, NextAuth, TypeScript
-[View Project](https://ecommerce-admin-pink-gamma.vercel.app/)
-
-### Ecommerce Store
-A fully functional ecommerce store featuring cart, checkout, and payment processing capabilities.
-**Tags:** React, Next.js, MySQL, Prisma, Tailwind, Stripe, TypeScript
-[View Project](https://ecommerce-store-three-plum.vercel.app/)
-
-### Airbnb Clone
-An Airbnb clone with map search, date picker, and reservation functionality.
-**Tags:** React, Next.js, MySQL, Prisma, Tailwind, NextAuth, TypeScript
-[View Project](https://threads-clone-sigma.vercel.app/)
-
-
-## Contact
-
-Feel free to get in touch with me:
-
-- Email: prsthibha@gmail.com
-- LinkedIn: https://www.linkedin.com/in/prathibha-ratnayake/
-- Portfolio Website: https://prathibha-portfolio.vercel.app/
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Local dev server on http://localhost:3000 |
+| `npm run build` | Production build |
+| `npm run start` | Run the production build |
+| `npm run type-check` | TypeScript noEmit check |
 
 ## License
 
-This project is licensed under the [MIT](https://choosealicense.com/licenses/mit/) license.
-
----
-
-Thank you for visiting my portfolio! If you have any questions or would like to collaborate, please feel free to reach out.
+MIT.
