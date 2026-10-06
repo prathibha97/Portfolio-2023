@@ -1,63 +1,44 @@
-import Reveal from '@/components/primitives/reveal';
-import SectionHeading from '@/components/primitives/section-heading';
 import { formatDate } from '@/lib/utils';
 import { getAllPosts } from '@/lib/writing';
-import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function WritingTeaser() {
   const posts = (await getAllPosts()).slice(0, 3);
+  if (posts.length === 0) return null;
 
   return (
-    <section className="relative py-32 md:py-44">
+    <section className="section">
       <div className="container-page">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <SectionHeading
-            index="05"
-            eyebrow="Writing"
-            title="Recent notes, public-thinking style."
-          />
-          <Reveal delay={0.2}>
-            <Link
-              href="/writing"
-              data-cursor="link"
-              className="group inline-flex items-center gap-2 text-sm text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] transition-colors"
-            >
-              <span>All posts</span>
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </Link>
-          </Reveal>
-        </div>
+        <div className="grid grid-cols-12 gap-x-6 border-t border-[var(--color-rule-strong)] pt-6">
+          <h2 className="t-meta col-span-12 mb-8 md:col-span-2 md:mb-0 md:self-start md:sticky md:top-20">Writing</h2>
 
-        <ul className="mt-16 divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
-          {posts.map((post, i) => (
-            <Reveal key={post.slug} delay={i * 0.05}>
-              <li>
-                <Link
-                  href={`/writing/${post.slug}`}
-                  data-cursor="view"
-                  className="group grid grid-cols-12 items-baseline gap-x-6 gap-y-2 px-2 py-7 rounded-xl transition-colors hover:bg-[var(--color-surface)]/30"
-                >
-                  <div className="col-span-12 md:col-span-2 font-mono text-xs uppercase tracking-[0.18em] text-[var(--color-fg-subtle)]">
-                    {formatDate(post.date)}
-                  </div>
-                  <div className="col-span-12 md:col-span-8">
-                    <h3 className="font-display text-xl md:text-2xl text-[var(--color-fg)] transition-colors group-hover:text-[var(--color-accent)]">
-                      {post.title}
-                    </h3>
-                    <p className="mt-1.5 text-sm text-[var(--color-fg-muted)] max-w-prose">
-                      {post.description}
-                    </p>
-                  </div>
-                  <div className="col-span-12 md:col-span-2 flex items-center justify-end gap-2 font-mono text-xs text-[var(--color-fg-subtle)]">
-                    <span>{post.readingTime}</span>
-                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </div>
-                </Link>
-              </li>
-            </Reveal>
-          ))}
-        </ul>
+          <div className="col-span-12 md:col-span-10">
+            <ul className="border-t border-[var(--color-rule)]">
+              {posts.map((post) => (
+                <li key={post.slug} className="border-b border-[var(--color-rule)]">
+                  <Link href={`/writing/${post.slug}`} className="group grid grid-cols-12 gap-x-6 gap-y-1 py-7">
+                    <span className="t-meta col-span-12 sm:col-span-2">{formatDate(post.date)}</span>
+                    <div className="col-span-12 sm:col-span-8">
+                      <h3 className="display text-[1.375rem] leading-tight">
+                        <span className="link-rule">{post.title}</span>
+                      </h3>
+                      <p className="t-body mt-1.5 text-[var(--color-ink-2)]">{post.description}</p>
+                    </div>
+                    <span className="t-meta col-span-12 sm:col-span-2 sm:text-right">
+                      {post.readingTime}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <p className="mt-8 text-[0.9375rem]">
+              <Link className="link-rule text-[var(--color-mark)]" href="/writing">
+                All posts
+              </Link>
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );

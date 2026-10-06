@@ -1,376 +1,286 @@
-@import url('https://api.fontshare.com/v2/css?f[]=general-sans@200,300,400,500,600,700&display=swap');
 @import 'tailwindcss';
 
 @theme {
-  /* Surface */
-  --color-bg: #08090b;
-  --color-bg-2: #0d0e11;
-  --color-surface: #131418;
-  --color-surface-2: #1a1c22;
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-strong: rgba(255, 255, 255, 0.14);
+  /* Paper — cool, not cream. The whole site sits on one ground. */
+  --color-paper: #fafaf8;
+  --color-paper-sunk: #f1f1ec;
 
-  /* Text */
-  --color-fg: #ededee;
-  --color-fg-muted: #a1a1a6;
-  --color-fg-subtle: #6e6e76;
+  /* Ink */
+  --color-ink: #14161a;
+  --color-ink-2: #565b63;
+  --color-ink-3: #6b7078; /* 4.77:1 on paper — t-meta is 13px, so it needs AA */
 
-  /* Accent — warm amber */
-  --color-accent: #f5b13d;
-  --color-accent-soft: #fbe0a6;
-  --color-accent-dim: rgba(245, 177, 61, 0.16);
+  /* Rules — hairlines do the structural work here, not boxes */
+  --color-rule: #dddcd4;
+  --color-rule-strong: #c2c1b7;
 
-  /* Signal */
-  --color-signal-live: #6ee7b7;
+  /* Mark — oxblood. Deliberately rare: links, one timeline node, focus ring. */
+  --color-mark: #9e2b25;
 
-  /* Fonts */
-  --font-sans: 'General Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, 'SF Mono', Menlo, monospace;
-  --font-display: 'General Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  /* Radii */
-  --radius-xs: 6px;
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 22px;
-  --radius-xl: 32px;
-
-  /* Easings */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
     scroll-behavior: smooth;
   }
 
-  html.lenis,
-  html.lenis body {
-    height: auto;
-  }
-
-  .lenis.lenis-smooth {
-    scroll-behavior: auto !important;
-  }
-
-  .lenis.lenis-smooth [data-lenis-prevent] {
-    overscroll-behavior: contain;
-  }
-
-  .lenis.lenis-stopped {
-    overflow: hidden;
-  }
-
   body {
-    background-color: var(--color-bg);
-    color: var(--color-fg);
+    background-color: var(--color-paper);
+    color: var(--color-ink);
     font-family: var(--font-sans);
-    overflow-x: hidden;
+    font-synthesis-weight: none;
   }
 
   ::selection {
-    background: var(--color-accent);
-    color: var(--color-bg);
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
 
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--color-border-strong);
-    border-radius: 999px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.24);
+  :focus-visible {
+    outline: 2px solid var(--color-mark);
+    outline-offset: 3px;
   }
 
-  h1, h2, h3, h4 {
-    letter-spacing: -0.025em;
+  h1, h2, h3 {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
 }
 
 @layer utilities {
-  /* Display heading — General Sans, medium weight, tight tracking */
-  .font-display {
-    font-family: var(--font-display);
+  /* ---- Type scale ------------------------------------------------------
+     One family (Archivo), carrying everything via size + width + weight.
+     Display uses the condensed width axis; body stays at normal width.
+     That width shift is the only typographic "voice" trick on the site. */
+
+  .display {
+    font-stretch: 88%;
     font-weight: 500;
     letter-spacing: -0.035em;
-    font-feature-settings: 'liga', 'kern', 'ss01';
+    line-height: 0.9;
   }
 
-  /* Mono — JetBrains Mono with ligatures OFF (NL feel) + tabular nums */
-  .font-mono {
-    font-family: var(--font-mono);
-    font-feature-settings: 'liga' 0, 'calt' 0;
-    font-variant-numeric: tabular-nums slashed-zero;
+  .t-display {
+    font-size: clamp(3.25rem, 10.5vw, 15rem);
+  }
+  .t-h2 {
+    font-size: clamp(2rem, 4.6vw, 5rem);
+    line-height: 0.98;
+  }
+  .t-h3 {
+    font-size: clamp(1.35rem, 2.2vw, 1.875rem);
+    line-height: 1.1;
   }
 
-  /* Engineer-grade numeric alignment for any context (stats, prices, times) */
+  /* Body copy. Capped near 68ch per Bringhurst. */
+  .t-body {
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    max-width: 62ch;
+  }
+  .t-body-lg {
+    font-size: clamp(1.1rem, 1.6vw, 1.375rem);
+    line-height: 1.5;
+    max-width: 54ch;
+  }
+
+  /* Meta: small, sentence case, tabular. No tracking-out, no uppercase. */
+  .t-meta {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--color-ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
   .tabular {
-    font-variant-numeric: tabular-nums slashed-zero;
+    font-variant-numeric: tabular-nums;
   }
 
-  /* Fluid type scale (clamp) */
-  .text-fluid-hero {
-    font-size: clamp(3rem, 10vw, 9rem);
-    line-height: 0.92;
-    letter-spacing: -0.045em;
-  }
-  .text-fluid-h1 {
-    font-size: clamp(2.25rem, 6vw, 5rem);
-    line-height: 0.95;
-    letter-spacing: -0.035em;
-  }
-  .text-fluid-h2 {
-    font-size: clamp(1.75rem, 4vw, 3.25rem);
-    line-height: 1.02;
-    letter-spacing: -0.03em;
-  }
-  .text-fluid-body {
-    font-size: clamp(1rem, 1.2vw, 1.2rem);
-    line-height: 1.6;
-  }
+  /* ---- Layout ---------------------------------------------------------- */
 
-  /* Mono micro labels */
-  .label-eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-fg-muted);
-  }
-
-  /* Glassy chrome */
-  .glass {
-    background: rgba(20, 22, 26, 0.55);
-    backdrop-filter: blur(14px) saturate(130%);
-    -webkit-backdrop-filter: blur(14px) saturate(130%);
-    border: 1px solid var(--color-border);
-  }
-
-  .glass-strong {
-    background: rgba(13, 14, 17, 0.78);
-    backdrop-filter: blur(20px) saturate(140%);
-    -webkit-backdrop-filter: blur(20px) saturate(140%);
-    border: 1px solid var(--color-border);
-  }
-
-  /* Subtle inner ring + bevel */
-  .surface-card {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0.012) 100%);
-    border: 1px solid var(--color-border);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.04),
-      0 1px 2px rgba(0, 0, 0, 0.4);
-  }
-
-  /* Aurora blob */
-  .aurora {
-    background: radial-gradient(
-      40% 60% at 50% 50%,
-      rgba(245, 177, 61, 0.35) 0%,
-      rgba(245, 177, 61, 0.0) 70%
-    );
-    filter: blur(60px);
-  }
-
-  /* Grid lines bg */
-  .grid-lines {
-    background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-    background-size: 64px 64px;
-  }
-
-  /* Grain noise overlay */
-  .grain::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity: 0.06;
-    mix-blend-mode: overlay;
-  }
-
-  /* Hairline */
-  .hairline {
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--color-border-strong) 20%, var(--color-border-strong) 80%, transparent);
-  }
-
-  /* Subtle accent glow */
-  .accent-glow {
-    box-shadow:
-      0 0 0 1px rgba(245, 177, 61, 0.25),
-      0 8px 32px rgba(245, 177, 61, 0.18);
-  }
-
-  /* Magnetic / cursor primitives */
-  .cursor-pointer-hide {
-    cursor: none;
-  }
-
-  /* Text gradient (accent → white) */
-  .gradient-text {
-    background: linear-gradient(180deg, var(--color-fg) 30%, var(--color-fg-muted) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  /* Marquee */
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
-  .animate-marquee {
-    animation: marquee 40s linear infinite;
-  }
-
-  /* Slow pulse */
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%      { opacity: 0.4; transform: scale(0.9); }
-  }
-  .animate-pulse-dot {
-    animation: pulse-dot 2s var(--ease-in-out-quart) infinite;
-  }
-
-  /* Reveal-up */
-  @keyframes reveal-up {
-    from { transform: translateY(40px); opacity: 0; }
-    to   { transform: translateY(0);    opacity: 1; }
-  }
-
-  /* Hero entry — pure CSS, no JS, never invisible if it fails */
-  @keyframes hero-in {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes hero-in-up {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .animate-hero-in {
-    opacity: 0;
-    animation: hero-in 0.8s var(--ease-out-expo) both;
-  }
-  .animate-hero-in-up {
-    opacity: 0;
-    animation: hero-in-up 0.9s var(--ease-out-expo) both;
-  }
-
-  /* Container */
   .container-page {
     width: 100%;
     margin-inline: auto;
+    max-width: 78rem;
     padding-inline: 1.25rem;
-    max-width: 80rem;
   }
-
   @media (min-width: 768px) {
-    .container-page {
-      padding-inline: 2rem;
-    }
+    .container-page { padding-inline: 2.5rem; }
   }
-
   @media (min-width: 1280px) {
-    .container-page {
-      padding-inline: 3rem;
+    .container-page { padding-inline: 4rem; }
+  }
+  /* Past ~1536 the old 78rem cap left a narrow column stranded in white.
+     The measure keeps growing so the page fills the screen it is given. */
+  @media (min-width: 1536px) {
+    .container-page { max-width: 88rem; }
+  }
+  @media (min-width: 1920px) {
+    .container-page { max-width: 104rem; padding-inline: 5rem; }
+  }
+  @media (min-width: 2400px) {
+    .container-page { max-width: 120rem; padding-inline: 6rem; }
+  }
+
+  /* Section spacing — one scale, applied everywhere. */
+  .section {
+    padding-block: 6rem;
+  }
+  @media (min-width: 768px) {
+    .section { padding-block: 8.5rem; }
+  }
+
+  /* Ink ground. The whole site is paper except two inverted blocks, which
+     is where the page gets its contrast instead of from decoration. */
+  .on-ink {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .on-ink .t-meta {
+    color: #9ba0a8;
+  }
+
+  /* ---- Links ----------------------------------------------------------- */
+
+  /* Underline grows from the left on hover. The only hover move on the site. */
+  .link-rule {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size 0.35s var(--ease-out-expo);
+  }
+  .link-rule:hover,
+  .link-rule:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  /* ---- Timeline rail (Path) -------------------------------------------
+     Fill tracks how far you have scrolled through the career list. Native
+     scroll-driven animation where it exists; a plain filled rail elsewhere,
+     which is a correct static state rather than a broken one. */
+
+  .rail-fill {
+    transform-origin: top;
+    transform: scaleY(1);
+  }
+
+  @supports (animation-timeline: view()) {
+    .rail-fill {
+      transform: scaleY(0);
+      animation: rail-grow linear both;
+      animation-timeline: view();
+      /* The list is only a little taller than the viewport, so `contain`
+         alone gives ~100px of travel and the fill snaps. Starting partway
+         through entry buys enough scroll distance for it to read as motion. */
+      animation-range: entry 25% contain 100%;
     }
   }
 
-  /* Prose for MDX */
-  .prose-editorial {
-    color: var(--color-fg);
-    font-size: 1.0625rem;
-    line-height: 1.75;
+  @keyframes rail-grow {
+    to { transform: scaleY(1); }
   }
-  .prose-editorial h1,
+
+  /* ---- One orchestrated entrance, hero only ---------------------------- */
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .rise {
+    animation: rise 0.9s var(--ease-out-expo) both;
+  }
+
+  /* ---- Prose (MDX) ----------------------------------------------------- */
+
+  .prose-editorial {
+    color: var(--color-ink-2);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+  }
+  .prose-editorial > * {
+    max-width: 68ch;
+  }
   .prose-editorial h2,
   .prose-editorial h3 {
-    font-family: var(--font-sans);
-    font-weight: 500;
-    color: var(--color-fg);
+    color: var(--color-ink);
+    font-stretch: 88%;
     letter-spacing: -0.025em;
-    margin-top: 2.25rem;
-    margin-bottom: 0.85rem;
+    margin-top: 2.75rem;
+    margin-bottom: 0.75rem;
   }
-  .prose-editorial h1 { font-size: 2.25rem; line-height: 1.05; }
-  .prose-editorial h2 { font-size: 1.75rem; line-height: 1.15; }
-  .prose-editorial h3 { font-size: 1.35rem; line-height: 1.2; }
-  .prose-editorial p  {
-    margin-bottom: 1.15rem;
-    color: var(--color-fg-muted);
-  }
+  .prose-editorial h2 { font-size: 1.875rem; line-height: 1.1; }
+  .prose-editorial h3 { font-size: 1.375rem; line-height: 1.2; }
+  .prose-editorial p { margin-bottom: 1.25rem; }
   .prose-editorial a {
-    color: var(--color-accent);
+    color: var(--color-mark);
     text-decoration: underline;
     text-decoration-thickness: 1px;
-    text-underline-offset: 4px;
+    text-underline-offset: 3px;
   }
-  .prose-editorial strong { color: var(--color-fg); }
+  .prose-editorial strong { color: var(--color-ink); font-weight: 600; }
   .prose-editorial code {
     font-family: var(--font-mono);
-    background: var(--color-surface);
-    padding: 0.15rem 0.4rem;
-    border-radius: 6px;
-    font-size: 0.9em;
-    border: 1px solid var(--color-border);
+    background: var(--color-paper-sunk);
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    font-size: 0.875em;
   }
   .prose-editorial pre {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 1.25rem;
+    background: var(--color-ink);
+    color: #e8e8e4;
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
     overflow-x: auto;
     margin-block: 1.75rem;
-    font-size: 0.92rem;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    max-width: none;
   }
   .prose-editorial pre code {
     background: transparent;
-    border: 0;
     padding: 0;
     font-size: inherit;
   }
   .prose-editorial blockquote {
-    border-left: 2px solid var(--color-accent);
+    border-left: 2px solid var(--color-mark);
     padding-left: 1.25rem;
-    color: var(--color-fg);
-    font-size: 1.2rem;
-    line-height: 1.55;
-    font-weight: 400;
-    letter-spacing: -0.015em;
+    color: var(--color-ink);
     margin-block: 1.75rem;
   }
-  .prose-editorial ul, .prose-editorial ol {
-    color: var(--color-fg-muted);
+  .prose-editorial ul { list-style: disc; }
+  .prose-editorial ol { list-style: decimal; }
+  .prose-editorial ul,
+  .prose-editorial ol {
     padding-left: 1.25rem;
     margin-bottom: 1.25rem;
   }
-  .prose-editorial li { margin-bottom: 0.35rem; }
+  .prose-editorial li { margin-bottom: 0.4rem; }
+  .prose-editorial li::marker { color: var(--color-ink-3); }
   .prose-editorial hr {
     border: 0;
-    border-top: 1px solid var(--color-border);
-    margin-block: 2.5rem;
+    border-top: 1px solid var(--color-rule);
+    margin-block: 2.75rem;
   }
 }
 
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  .rail-fill {
+    animation: none !important;
+    transform: scaleY(1) !important;
+  }
+
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;

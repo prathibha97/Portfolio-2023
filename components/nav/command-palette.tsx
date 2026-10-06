@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import type { ComponentType } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -156,13 +155,15 @@ export default function CommandPalette({ onClose }: { onClose: () => void }) {
     return acc;
   }, {});
 
+  // Overlay starts on the block axis only: the previous place-items-start
+  // also start-aligned the inline axis, which pinned the panel to the left.
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-[200] grid place-items-start pt-24 px-4 bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-[200] grid items-start justify-items-center px-4 pt-24 bg-[var(--color-ink)]/30"
       onClick={onClose}
     >
       <motion.div
@@ -170,31 +171,31 @@ export default function CommandPalette({ onClose }: { onClose: () => void }) {
         animate={{ y: 0, scale: 1, opacity: 1 }}
         exit={{ y: -16, scale: 0.97, opacity: 0 }}
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-xl rounded-2xl glass-strong shadow-[0_24px_80px_rgba(0,0,0,0.6)] overflow-hidden"
+        className="w-full max-w-xl overflow-hidden border border-[var(--color-rule-strong)] bg-[var(--color-paper)] shadow-[0_24px_60px_rgba(20,22,26,0.18)]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center gap-3 border-b border-[var(--color-border)] px-4">
-          <Compass className="h-4 w-4 text-[var(--color-fg-subtle)]" />
+        <div className="flex items-center gap-3 border-b border-[var(--color-rule)] px-4">
+          <Compass className="h-4 w-4 text-[var(--color-ink-3)]" />
           <input
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search anywhere"
-            className="flex-1 bg-transparent py-4 text-sm placeholder:text-[var(--color-fg-subtle)] outline-none"
+            placeholder="Jump to…"
+            className="flex-1 bg-transparent py-4 text-sm placeholder:text-[var(--color-ink-3)] outline-none"
           />
-          <kbd className="font-mono text-[10px] rounded border border-[var(--color-border)] px-1.5 py-0.5 text-[var(--color-fg-muted)]">
+          <kbd className="rounded-[3px] border border-[var(--color-rule)] px-1.5 py-0.5 text-[11px] text-[var(--color-ink-3)]">
             ESC
           </kbd>
         </div>
         <div className="max-h-[60vh] overflow-y-auto p-2">
           {filtered.length === 0 && (
-            <div className="px-4 py-6 text-center text-sm text-[var(--color-fg-subtle)]">
+            <div className="px-4 py-6 text-center text-sm text-[var(--color-ink-3)]">
               No matches.
             </div>
           )}
           {Object.entries(grouped).map(([group, list]) => (
             <div key={group} className="mb-1">
-              <div className="px-3 py-2 label-eyebrow">{group}</div>
+              <div className="px-3 py-2 t-meta">{group}</div>
               {list.map((it) => {
                 const idx = filtered.indexOf(it);
                 const isActive = idx === active;
@@ -204,16 +205,16 @@ export default function CommandPalette({ onClose }: { onClose: () => void }) {
                     onMouseEnter={() => setActive(idx)}
                     onClick={it.action}
                     className={cn(
-                      'w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors',
+                      'w-full flex items-center gap-3 px-3 py-2.5 text-left text-sm transition-colors',
                       isActive
-                        ? 'bg-[var(--color-surface-2)] text-[var(--color-fg)]'
-                        : 'text-[var(--color-fg-muted)]'
+                        ? 'bg-[var(--color-paper-sunk)] text-[var(--color-ink)]'
+                        : 'text-[var(--color-ink-2)]'
                     )}
                   >
                     <it.icon className="h-4 w-4" />
                     <span className="flex-1">{it.label}</span>
                     {it.hint && (
-                      <span className="font-mono text-xs text-[var(--color-fg-subtle)]">
+                      <span className="text-xs text-[var(--color-ink-3)]">
                         {it.hint}
                       </span>
                     )}
@@ -224,12 +225,10 @@ export default function CommandPalette({ onClose }: { onClose: () => void }) {
             </div>
           ))}
         </div>
-        <div className="border-t border-[var(--color-border)] px-4 py-2.5 flex items-center justify-between text-[11px] text-[var(--color-fg-subtle)] font-mono">
+        <div className="flex items-center gap-5 border-t border-[var(--color-rule)] px-4 py-2.5 text-[11px] text-[var(--color-ink-3)]">
           <span>↑↓ navigate</span>
           <span>↵ select</span>
-          <Link href="/" onClick={onClose} className="hover:text-[var(--color-fg)]">
-            prathibha.dev
-          </Link>
+          <span>esc close</span>
         </div>
       </motion.div>
     </motion.div>

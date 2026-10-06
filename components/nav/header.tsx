@@ -3,7 +3,7 @@
 import { useActiveSection } from '@/context/active-section-context';
 import { navLinks, profile } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react';
+import { AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -11,13 +11,9 @@ import CommandPalette from './command-palette';
 
 export default function Header() {
   const { activeSection, setActiveSection, setTimeOfLastClicked } = useActiveSection();
-  const { scrollY } = useScroll();
-  const [scrolled, setScrolled] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === '/';
-
-  useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 80));
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -32,64 +28,39 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-[100] flex justify-center pointer-events-none">
-        <motion.div
-          initial={{ y: -24, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="pointer-events-auto mt-4 w-[min(96%,52rem)]"
-        >
-          <nav
-            className={cn(
-              'flex items-center justify-between gap-2 rounded-full px-3 py-2 transition-all duration-500',
-              scrolled
-                ? 'glass-strong shadow-[0_8px_40px_rgba(0,0,0,0.35)]'
-                : 'glass'
-            )}
+      {/* A masthead rule, not a floating pill. */}
+      <header className="sticky top-0 z-[100] border-b border-[var(--color-rule)] bg-[var(--color-paper)]/90 backdrop-blur-[2px]">
+        <div className="container-page flex h-14 items-center justify-between gap-6">
+          <Link
+            href="/"
+            className="link-rule text-[0.9375rem] font-medium"
+            onClick={() => {
+              setActiveSection('Home');
+              setTimeOfLastClicked(Date.now());
+            }}
           >
-            {/* Wordmark */}
-            <Link
-              href="/"
-              data-cursor="link"
-              className="group flex items-center gap-2 pl-2 pr-3"
-              onClick={() => {
-                setActiveSection('Home');
-                setTimeOfLastClicked(Date.now());
-              }}
-            >
-              <span className="relative grid h-7 w-7 place-items-center rounded-full bg-[var(--color-accent)] text-[var(--color-bg)] font-mono text-[11px] font-bold">
-                P
-                <span className="absolute inset-0 rounded-full ring-1 ring-[var(--color-accent)]/40 animate-pulse-dot" />
-              </span>
-              <span className="hidden sm:inline font-medium text-sm tracking-tight">
-                {profile.shortName}
-                <span className="text-[var(--color-fg-subtle)]"> / engineer</span>
-              </span>
-            </Link>
+            {profile.name}
+          </Link>
 
-            {/* Nav links — single ordered list (sections + writing route) */}
-            <ul className="hidden md:flex items-center gap-1 text-sm">
+          <nav className="flex items-center gap-5">
+            <ul className="hidden items-center gap-5 text-[0.9375rem] sm:flex">
               {navLinks.map((link) => {
                 const isRoute = link.hash.startsWith('/');
-                const href = isRoute
-                  ? link.hash
-                  : isHome
-                  ? link.hash
-                  : `/${link.hash}`;
+                const href = isRoute ? link.hash : isHome ? link.hash : `/${link.hash}`;
                 const active = isRoute
                   ? pathname?.startsWith(link.hash) ?? false
                   : isHome && activeSection === link.name;
 
                 return (
-                  <li key={link.hash} className="relative">
+                  <li key={link.hash}>
                     <Link
                       href={href}
-                      data-cursor="link"
+                      aria-current={active ? 'page' : undefined}
                       className={cn(
-                        'relative z-10 inline-flex rounded-full px-3 py-1.5 transition-colors duration-300',
+                        'link-rule transition-colors',
                         active
-                          ? 'text-[var(--color-fg)]'
-                          : 'text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]'
+                          ? 'text-[var(--color-ink)] [background-size:100%_1px]'
+                          : 'text-[var(--color-ink-2)] hover:text-[var(--color-ink)]'
                       )}
                       onClick={() => {
                         if (!isRoute) {
@@ -100,35 +71,29 @@ export default function Header() {
                     >
                       {link.name}
                     </Link>
-                    {active && !isRoute && (
-                      <motion.span
-                        layoutId="nav-active"
-                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                        className="absolute inset-0 rounded-full bg-[var(--color-surface-2)]"
-                      />
-                    )}
                   </li>
                 );
               })}
             </ul>
 
-            {/* Right side: cmd+k */}
             <button
               onClick={() => setPaletteOpen(true)}
-              data-cursor="link"
-              className="flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 text-xs text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] transition-colors"
-              aria-label="Open command palette"
+              className="t-meta hover:text-[var(--color-ink)] transition-colors"
+              aria-label="Open the jump-to menu"
             >
-              <span className="hidden sm:inline">Jump to</span>
-              <kbd className="font-mono text-[10px] rounded border border-[var(--color-border-strong)] px-1.5 py-0.5">
+              {/* ⌘K means nothing on a phone, where this is the only nav. */}
+              <span className="sm:hidden">Menu</span>
+              <span className="hidden sm:inline" aria-hidden>
                 ⌘K
-              </kbd>
+              </span>
             </button>
           </nav>
-        </motion.div>
+        </div>
       </header>
 
-      <AnimatePresence>{paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} />}</AnimatePresence>
+      <AnimatePresence>
+        {paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} />}
+      </AnimatePresence>
     </>
   );
 }

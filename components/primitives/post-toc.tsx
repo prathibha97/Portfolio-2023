@@ -52,12 +52,11 @@ export default function PostToc() {
   return (
     <nav aria-label="On this page" className="w-full">
       <div
-        className="label-eyebrow mb-4"
-        style={{ fontVariantNumeric: 'tabular-nums' }}
+        className="t-meta mb-4"
       >
-        // on this page
+        On this page
       </div>
-      <ul className="space-y-2 border-l border-[var(--color-border)] pl-3">
+      <ul className="space-y-2 border-l border-[var(--color-rule)] pl-3">
         {headings.map((h) => {
           const isActive = active === h.id;
           return (
@@ -72,14 +71,14 @@ export default function PostToc() {
                 className={cn(
                   'group relative block py-0.5 text-[12.5px] leading-snug transition-colors',
                   isActive
-                    ? 'text-[var(--color-fg)]'
-                    : 'text-[var(--color-fg-subtle)] hover:text-[var(--color-fg-muted)]'
+                    ? 'text-[var(--color-ink)]'
+                    : 'text-[var(--color-ink-3)] hover:text-[var(--color-ink)]'
                 )}
               >
                 {isActive && (
                   <span
                     aria-hidden
-                    className="absolute -left-[13px] top-1.5 h-3 w-px bg-[var(--color-accent)]"
+                    className="absolute -left-[13px] top-1.5 h-3 w-px bg-[var(--color-mark)]"
                   />
                 )}
                 {h.text}

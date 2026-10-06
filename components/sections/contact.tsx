@@ -3,209 +3,131 @@
 import { sendEmail } from '@/actions/sendEmail';
 import { profile } from '@/lib/data';
 import { useSectionInView } from '@/lib/hooks';
-import { cn } from '@/lib/utils';
-import { ArrowUpRight, Send } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
 import { useRef, useState, useTransition } from 'react';
 import { toast } from 'react-hot-toast';
-import Magnetic from '../primitives/magnetic';
-import Reveal from '../primitives/reveal';
-import SectionHeading from '../primitives/section-heading';
+
+const field =
+  'w-full border border-[var(--color-ink-3)] bg-transparent px-3.5 py-3 text-[0.9375rem] placeholder:text-[var(--color-ink-3)] outline-none transition-colors focus:border-[var(--color-ink)]';
 
 export default function Contact() {
   const containerRef = useRef<HTMLElement>(null);
   useSectionInView('Contact', 0.4, containerRef);
 
   const [pending, startTransition] = useTransition();
-  const [success, setSuccess] = useState(false);
+  const [sent, setSent] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = (formData: FormData) => {
     startTransition(async () => {
       const result = await sendEmail(formData);
       if (!result.ok) {
-        toast.error(result.error, {
-          style: {
-            background: '#131418',
-            color: '#ededee',
-            border: '1px solid rgba(255,255,255,0.08)',
-          },
-        });
+        toast.error(result.error);
         return;
       }
-      toast.success('Sent. I’ll get back to you soon.', {
-        style: {
-          background: '#131418',
-          color: '#ededee',
-          border: '1px solid rgba(245,177,61,0.4)',
-        },
-        iconTheme: { primary: '#f5b13d', secondary: '#08090b' },
-      });
-      setSuccess(true);
+      setSent(true);
       formRef.current?.reset();
-      setTimeout(() => setSuccess(false), 5000);
     });
   };
 
   return (
-    <section
-      id="contact"
-      ref={containerRef}
-      className="relative py-32 md:py-44 scroll-mt-24"
-    >
+    <section id="contact" ref={containerRef} className="section scroll-mt-14">
       <div className="container-page">
-        <div className="grid gap-16 lg:grid-cols-12">
-          {/* Left: pitch */}
-          <div className="lg:col-span-6">
-            <SectionHeading
-              index="06"
-              eyebrow="Contact"
-              title="Let's build the thing you've been describing in meetings."
-              description="I'm open to senior engineering roles in 2026 and actively take freelance / contract work alongside my current role — full-stack web products, Go services, or a focused engineering sprint. The fastest path to me is a one-paragraph email."
-            />
+        <div className="grid grid-cols-12 gap-x-6 border-t border-[var(--color-rule-strong)] pt-6">
+          <h2 className="t-meta col-span-12 mb-8 md:col-span-2 md:mb-0 md:self-start md:sticky md:top-20">Contact</h2>
 
-            <Reveal delay={0.2} className="mt-12">
-              <div className="space-y-6">
-                <a
-                  href={`mailto:${profile.email}`}
-                  data-cursor="link"
-                  className="group inline-flex items-baseline gap-3"
-                >
-                  <span className="label-eyebrow">Email</span>
-                  <span className="font-display text-2xl md:text-3xl text-[var(--color-fg)] group-hover:text-[var(--color-accent)] transition-colors">
+          <div className="col-span-12 md:col-span-10">
+            <p className="display t-h2 max-w-[16ch]">Tell me what you&rsquo;re building.</p>
+
+            <div className="mt-16 grid grid-cols-12 gap-x-6 gap-y-14">
+              <div className="col-span-12 lg:col-span-5">
+                <p className="t-body text-[var(--color-ink-2)]">
+                  I&rsquo;m looking for my next engineering role and I take freelance work
+                  alongside my current job &mdash; full-stack products, Go services, or a short
+                  focused sprint. A paragraph about the problem gets a faster answer than a brief.
+                </p>
+
+                <p className="display mt-8 text-[clamp(1.25rem,2.6vw,2rem)]">
+                  <a className="link-rule" href={`mailto:${profile.email}`}>
                     {profile.email}
-                  </span>
-                  <ArrowUpRight className="h-5 w-5 text-[var(--color-fg-subtle)] transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                </a>
+                  </a>
+                </p>
 
-                <div className="flex flex-wrap gap-3 pt-3">
-                  <Magnetic strength={0.25}>
-                    <a
-                      href={profile.socials.linkedin}
-                      target="_blank"
-                      rel="noreferrer"
-                      data-cursor="link"
-                      className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] px-4 py-2 text-sm text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] transition-colors"
-                    >
-                      LinkedIn <ArrowUpRight className="h-3.5 w-3.5" />
-                    </a>
-                  </Magnetic>
-                  <Magnetic strength={0.25}>
-                    <a
-                      href={profile.socials.github}
-                      target="_blank"
-                      rel="noreferrer"
-                      data-cursor="link"
-                      className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] px-4 py-2 text-sm text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] transition-colors"
-                    >
-                      GitHub <ArrowUpRight className="h-3.5 w-3.5" />
-                    </a>
-                  </Magnetic>
-                </div>
-
-                <div className="mt-10 grid grid-cols-2 gap-6 text-sm">
-                  <div>
-                    <div className="label-eyebrow">Based in</div>
-                    <div className="mt-1 text-[var(--color-fg)]">{profile.location}</div>
-                  </div>
-                  <div>
-                    <div className="label-eyebrow">Timezone</div>
-                    <div className="mt-1 text-[var(--color-fg)]">{profile.timezone}</div>
-                  </div>
-                </div>
+                {/* Rows, not columns — this sits in a 5-of-12 well, which is
+                    too narrow to set three labelled values side by side. */}
+                <dl className="mt-10 divide-y divide-[var(--color-rule)] border-y border-[var(--color-rule)]">
+                  {[
+                    { term: 'Working style', value: profile.workingStyle },
+                    { term: 'Relocation', value: 'Open to it' },
+                    { term: 'Timezone', value: profile.timezone, tabular: true },
+                  ].map((row) => (
+                    <div key={row.term} className="grid grid-cols-12 gap-x-4 py-3">
+                      <dt className="t-meta col-span-5">{row.term}</dt>
+                      <dd className={`col-span-7 text-[0.9375rem]${row.tabular ? ' tabular' : ''}`}>
+                        {row.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
-            </Reveal>
-          </div>
 
-          {/* Right: form */}
-          <div className="lg:col-span-6">
-            <Reveal delay={0.15}>
-              <div className="relative rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)]/40 p-6 md:p-10 backdrop-blur-sm overflow-hidden grain">
-                <AnimatePresence mode="wait">
-                  {success ? (
-                    <motion.div
-                      key="success"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="flex flex-col items-center justify-center py-16 text-center"
+              <div className="col-span-12 lg:col-span-6 lg:col-start-7">
+                {sent ? (
+                  <div className="border-t border-[var(--color-ink)] pt-6">
+                    <p className="display t-h3">Sent.</p>
+                    <p className="t-body mt-2 text-[var(--color-ink-2)]">
+                      I read everything and reply within a day or two.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setSent(false)}
+                      className="link-rule mt-6 text-[0.9375rem] text-[var(--color-mark)]"
                     >
-                      <div className="grid h-16 w-16 place-items-center rounded-full bg-[var(--color-accent)]/15 border border-[var(--color-accent)]/40">
-                        <Send className="h-7 w-7 text-[var(--color-accent)]" strokeWidth={1.5} />
-                      </div>
-                      <h3 className="mt-6 font-display text-3xl text-[var(--color-fg)]">
-                        Message in flight.
-                      </h3>
-                      <p className="mt-2 text-[var(--color-fg-muted)] max-w-xs">
-                        I&apos;ll get back to you within 1–2 business days.
-                      </p>
-                    </motion.div>
-                  ) : (
-                    <motion.form
-                      key="form"
-                      ref={formRef}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      action={handleSubmit}
-                      className="flex flex-col gap-5"
+                      Send another
+                    </button>
+                  </div>
+                ) : (
+                  <form ref={formRef} action={handleSubmit} className="flex flex-col gap-5">
+                    <div>
+                      <label htmlFor="senderEmail" className="t-meta mb-2 block">
+                        Your email
+                      </label>
+                      <input
+                        id="senderEmail"
+                        name="senderEmail"
+                        type="email"
+                        required
+                        maxLength={500}
+                        placeholder="you@company.com"
+                        className={field}
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="message" className="t-meta mb-2 block">
+                        What are you building?
+                      </label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        required
+                        maxLength={5000}
+                        rows={8}
+                        placeholder="The problem, the stack, and roughly when you need it."
+                        className={`${field} resize-none`}
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={pending}
+                      className="self-start bg-[var(--color-ink)] px-6 py-3 text-[0.9375rem] text-[var(--color-paper)] transition-opacity hover:opacity-85 disabled:opacity-60"
                     >
-                      <div className="flex flex-col gap-2">
-                        <label htmlFor="senderEmail" className="label-eyebrow">
-                          Your email
-                        </label>
-                        <input
-                          id="senderEmail"
-                          name="senderEmail"
-                          type="email"
-                          required
-                          maxLength={500}
-                          placeholder="you@company.com"
-                          className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-2)] px-4 py-3.5 text-sm text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] outline-none transition-colors focus:border-[var(--color-accent)]"
-                        />
-                      </div>
-
-                      <div className="flex flex-col gap-2">
-                        <label htmlFor="message" className="label-eyebrow">
-                          What are you building?
-                        </label>
-                        <textarea
-                          id="message"
-                          name="message"
-                          required
-                          maxLength={5000}
-                          rows={7}
-                          placeholder="Tell me about the project, the stack, and the timeline."
-                          className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-2)] px-4 py-3.5 text-sm text-[var(--color-fg)] placeholder:text-[var(--color-fg-subtle)] outline-none transition-colors focus:border-[var(--color-accent)] resize-none"
-                        />
-                      </div>
-
-                      <button
-                        type="submit"
-                        disabled={pending}
-                        data-cursor="link"
-                        className={cn(
-                          'group relative mt-2 flex h-12 items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 text-sm font-medium text-[var(--color-bg)] transition-all hover:bg-[var(--color-accent-soft)] disabled:opacity-70',
-                          pending && 'cursor-wait'
-                        )}
-                      >
-                        {pending ? (
-                          <>
-                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--color-bg)]/40 border-t-[var(--color-bg)]" />
-                            Sending
-                          </>
-                        ) : (
-                          <>
-                            Send message
-                            <Send className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                          </>
-                        )}
-                      </button>
-                    </motion.form>
-                  )}
-                </AnimatePresence>
+                      {pending ? 'Sending…' : 'Send message'}
+                    </button>
+                  </form>
+                )}
               </div>
-            </Reveal>
+            </div>
           </div>
         </div>
       </div>

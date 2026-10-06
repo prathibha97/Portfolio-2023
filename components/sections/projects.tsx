@@ -2,197 +2,139 @@
 
 import { projectsData } from '@/lib/data';
 import { useSectionInView } from '@/lib/hooks';
-import { cn } from '@/lib/utils';
 import { ArrowUpRight } from 'lucide-react';
-import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
+import { motion, useMotionValue, useReducedMotion, useSpring } from 'motion/react';
 import Image from 'next/image';
-import { useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
-import Reveal from '../primitives/reveal';
-import SectionHeading from '../primitives/section-heading';
+import { useEffect, useRef, useState } from 'react';
 
 type Project = (typeof projectsData)[number];
 
-const SPRING = { stiffness: 220, damping: 22, mass: 0.5 };
+const FOLLOW = { stiffness: 320, damping: 30, mass: 0.5 };
 
-function ProjectRow({ project, index }: { project: Project; index: number }) {
+function ProjectEntry({ project, index }: { project: Project; index: number }) {
+  const plateRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
-  const previewRef = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
 
-  // Tilt driven by cursor position relative to the preview's box.
-  const rotateXRaw = useMotionValue(0);
-  const rotateYRaw = useMotionValue(0);
-  const rotateX = useSpring(rotateXRaw, SPRING);
-  const rotateY = useSpring(rotateYRaw, SPRING);
-  const previewScale = useSpring(useMotionValue(1), SPRING);
+  // Touch devices have no hover and no cursor to follow, so they get the
+  // plain plate rather than a chip pinned to nothing.
+  const [canHover, setCanHover] = useState(false);
+  useEffect(() => {
+    setCanHover(window.matchMedia('(hover: hover) and (pointer: fine)').matches);
+  }, []);
 
-  // Layered inner-tilt for a soft parallax (image moves slightly opposite to box).
-  const innerX = useTransform(rotateY, [-12, 12], [10, -10]);
-  const innerY = useTransform(rotateX, [-8, 8], [-8, 8]);
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const chipX = useSpring(rawX, FOLLOW);
+  const chipY = useSpring(rawY, FOLLOW);
 
-  const onMove = (e: ReactMouseEvent<HTMLAnchorElement>) => {
-    const el = previewRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = (e.clientX - cx) / rect.width;
-    const dy = (e.clientY - cy) / rect.height;
-    rotateYRaw.set(Math.max(-12, Math.min(12, dx * 16)));
-    rotateXRaw.set(Math.max(-8, Math.min(8, -dy * 12)));
+  const pointTo = (e: React.MouseEvent, snap = false) => {
+    const rect = plateRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    rawX.set(x);
+    rawY.set(y);
+    // Snap on entry, otherwise the chip springs in from the plate's corner.
+    if (snap) {
+      chipX.jump(x);
+      chipY.jump(y);
+    }
   };
 
-  const onEnter = () => {
-    setHovered(true);
-    previewScale.set(2);
-  };
-
-  const onLeave = () => {
-    setHovered(false);
-    rotateXRaw.set(0);
-    rotateYRaw.set(0);
-    previewScale.set(1);
-  };
+  const showChip = canHover && hovered;
 
   return (
-    <Reveal delay={index * 0.04} y={20}>
-      <a
-        href={project.link}
-        target="_blank"
-        rel="noreferrer"
-        data-cursor="view"
-        onMouseEnter={onEnter}
-        onMouseMove={onMove}
-        onMouseLeave={onLeave}
-        className={cn(
-          'group relative block border-b border-[var(--color-border)] py-7 md:py-9 transition-colors',
-          'hover:border-[var(--color-accent)]/50'
-        )}
-      >
-        {/* Hover overlay fill */}
-        <motion.div
-          aria-hidden
-          initial={{ opacity: 0 }}
-          animate={{ opacity: hovered ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
-          className="pointer-events-none absolute inset-x-[-1rem] inset-y-0 -z-10 bg-gradient-to-r from-[var(--color-accent)]/[0.04] via-transparent to-transparent"
-        />
-
-        <div className="grid grid-cols-12 items-baseline gap-x-4 md:gap-x-6">
-          {/* Index */}
+    <article className="group">
+      <a href={project.link} target="_blank" rel="noreferrer" className="block">
+        {/* Mounted like a plate — the screenshots are near-white, so they need
+            a tinted surround and a visible edge or they dissolve into the page. */}
+        <div className="bg-[var(--color-paper-sunk)] p-4 sm:p-6 md:p-8">
           <div
-            className="col-span-2 md:col-span-1 font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-fg-subtle)] pt-1"
-            style={{ fontVariantNumeric: 'tabular-nums' }}
+            ref={plateRef}
+            onMouseEnter={(e) => {
+              setHovered(true);
+              pointTo(e, true);
+            }}
+            onMouseLeave={() => setHovered(false)}
+            onMouseMove={pointTo}
+            className="relative aspect-[16/10] overflow-hidden border border-[var(--color-rule-strong)] shadow-[0_1px_3px_rgba(20,22,26,0.07)]"
           >
-            {String(index + 1).padStart(2, '0')}
-          </div>
+            <Image
+              src={project.imageUrl}
+              alt={`${project.title} — ${project.summary}`}
+              fill
+              sizes="(min-width: 1024px) 60vw, 100vw"
+              quality={90}
+              priority={index === 0}
+              placeholder="blur"
+              className="object-cover object-top transition-[transform,filter] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] saturate-[0.9] group-hover:scale-[1.02] group-hover:saturate-100"
+            />
 
-          {/* Title + subtitle */}
-          <div className="col-span-10 md:col-span-6">
-            <h3
-              className={cn(
-                'font-display text-3xl md:text-[2.6rem] leading-[1.02] transition-colors',
-                hovered ? 'text-[var(--color-accent)]' : 'text-[var(--color-fg)]'
-              )}
-            >
+            {/* Follows the cursor and names the destination. The only reason
+                it exists is that the plate gives no other sign it is a link. */}
+            {showChip && (
+              // Two elements on purpose: motion owns `transform` on the outer
+              // span for the follow, so the centring offset has to live on an
+              // inner one or the inline transform overwrites it.
               <motion.span
-                animate={{ x: hovered ? 6 : 0 }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="inline-flex items-baseline gap-3"
+                aria-hidden
+                style={reduced ? undefined : { x: chipX, y: chipY }}
+                className={
+                  'pointer-events-none absolute z-10 ' +
+                  (reduced ? 'right-3 top-3' : 'left-0 top-0')
+                }
               >
-                {project.title}
                 <motion.span
-                  animate={{
-                    opacity: hovered ? 1 : 0,
-                    x: hovered ? 0 : -8,
-                  }}
-                  transition={{ duration: 0.3 }}
-                  className="inline-block"
+                  initial={{ opacity: 0, scale: 0.92 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: reduced ? 0 : 0.18, ease: [0.16, 1, 0.3, 1] }}
+                  className={
+                    'inline-flex items-center gap-1.5 whitespace-nowrap bg-[var(--color-ink)] ' +
+                    'px-3 py-1.5 text-[0.8125rem] text-[var(--color-paper)] ' +
+                    (reduced ? '' : '-translate-x-1/2 -translate-y-1/2')
+                  }
                 >
-                  <ArrowUpRight className="h-5 w-5 md:h-7 md:w-7 text-[var(--color-accent)]" strokeWidth={1.6} />
+                  Visit <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
                 </motion.span>
               </motion.span>
-            </h3>
-            <p className="mt-1.5 text-[var(--color-fg-muted)] text-sm md:text-[15px] leading-relaxed">
-              {project.subtitle}
-            </p>
-
-            {/* Tags */}
-            <ul className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[10.5px] uppercase tracking-[0.15em] text-[var(--color-fg-subtle)]">
-              {project.tags.slice(0, 5).map((tag, i) => (
-                <li key={tag} className="inline-flex items-center gap-2">
-                  {i > 0 && <span className="text-[var(--color-fg-subtle)]/40">·</span>}
-                  <span>{tag}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Year */}
-          <div
-            className="hidden md:block md:col-span-2 font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-fg-subtle)] pt-1 text-right"
-            style={{ fontVariantNumeric: 'tabular-nums' }}
-          >
-            {project.year}
-          </div>
-
-          {/* Preview thumb — fixed footprint, scales/tilts in place */}
-          <div
-            className="hidden md:flex md:col-span-3 justify-end"
-            style={{ perspective: 1000 }}
-          >
-            <motion.div
-              ref={previewRef}
-              style={{
-                rotateX,
-                rotateY,
-                scale: previewScale,
-                transformStyle: 'preserve-3d',
-                transformOrigin: 'right center',
-                boxShadow: hovered
-                  ? '0 18px 50px -12px rgba(245, 177, 61, 0.30), 0 4px 14px rgba(0, 0, 0, 0.45)'
-                  : '0 2px 8px rgba(0, 0, 0, 0.25)',
-              }}
-              transition={{ boxShadow: { duration: 0.4 } }}
-              className="relative h-20 w-32 overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)]"
-            >
-              <motion.div
-                style={{ x: innerX, y: innerY, scale: 1.08 }}
-                className="absolute inset-0"
-              >
-                <Image
-                  src={project.imageUrl}
-                  alt=""
-                  fill
-                  sizes="320px"
-                  className={cn(
-                    'object-cover object-top transition-[filter] duration-500',
-                    hovered
-                      ? 'grayscale-0 brightness-100 saturate-100'
-                      : 'grayscale-[30%] brightness-[0.85] saturate-[85%]'
-                  )}
-                  placeholder="blur"
-                />
-              </motion.div>
-
-              {/* Subtle dark veil → fades away on hover */}
-              <motion.div
-                animate={{ opacity: hovered ? 0 : 0.25 }}
-                transition={{ duration: 0.35 }}
-                className="absolute inset-0 bg-[var(--color-bg)]"
-              />
-
-              {/* Accent corner tick — only on hover */}
-              <motion.div
-                animate={{ opacity: hovered ? 1 : 0 }}
-                transition={{ duration: 0.25 }}
-                className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"
-                style={{ boxShadow: '0 0 0 3px rgba(245,177,61,0.20)' }}
-              />
-            </motion.div>
+            )}
           </div>
         </div>
+
+        <div className="mt-8 grid grid-cols-12 gap-x-6 gap-y-4">
+          <div className="col-span-12 md:col-span-7">
+            <h3 className="display text-[clamp(1.75rem,3.2vw,2.5rem)] leading-none">
+              {/* Underline responds to the whole plate, not just the word. */}
+              <span className="link-rule group-hover:[background-size:100%_1px]">
+                {project.title}
+              </span>
+            </h3>
+            <p className="mt-1 text-[1.0625rem] text-[var(--color-ink-2)]">{project.summary}</p>
+            <p className="t-body mt-4 text-[var(--color-ink-2)]">{project.description}</p>
+          </div>
+
+          <dl className="col-span-12 grid grid-cols-2 gap-x-6 gap-y-4 md:col-span-4 md:col-start-9 md:grid-cols-1">
+            <div>
+              <dt className="t-meta">Year</dt>
+              <dd className="mt-1 text-[0.9375rem] tabular">{project.year}</dd>
+            </div>
+            <div>
+              <dt className="t-meta">Built with</dt>
+              <dd className="mt-1 text-[0.9375rem] text-[var(--color-ink-2)]">
+                {project.stack.join(', ')}
+              </dd>
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <dt className="t-meta">Live at</dt>
+              <dd className="mt-1 text-[0.9375rem] text-[var(--color-ink-2)]">
+                {new URL(project.link).hostname}
+              </dd>
+            </div>
+          </dl>
+        </div>
       </a>
-    </Reveal>
+    </article>
   );
 }
 
@@ -201,37 +143,35 @@ export default function Projects() {
   useSectionInView('Work', 0.2, containerRef);
 
   return (
-    <section
-      id="work"
-      ref={containerRef}
-      className="relative py-32 md:py-44 scroll-mt-24"
-    >
+    <section id="work" ref={containerRef} className="section scroll-mt-14">
       <div className="container-page">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <SectionHeading
-            index="02"
-            eyebrow="Selected work"
-            title="Eleven products. Most of them shipped. The honest highlights."
-          />
-          <Reveal delay={0.2}>
-            <a
-              href="https://github.com/prathibha97"
-              target="_blank"
-              rel="noreferrer"
-              data-cursor="link"
-              className="group inline-flex items-center gap-2 text-sm text-[var(--color-fg-muted)] hover:text-[var(--color-fg)] transition-colors"
-            >
-              <span>See everything on GitHub</span>
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
-          </Reveal>
-        </div>
+        <div className="grid grid-cols-12 gap-x-6 border-t border-[var(--color-rule-strong)] pt-6">
+          <h2 className="t-meta col-span-12 mb-8 md:col-span-2 md:mb-0 md:self-start md:sticky md:top-20">Work</h2>
 
-        {/* Editorial contents list */}
-        <div className="mt-16 border-t border-[var(--color-border)]">
-          {projectsData.map((p, i) => (
-            <ProjectRow key={p.title} project={p} index={i} />
-          ))}
+          <div className="col-span-12 md:col-span-10">
+            <p className="display t-h2 max-w-[22ch]">
+              Four projects worth opening.
+            </p>
+            <p className="t-body mt-6 text-[var(--color-ink-2)]">
+              These are the ones I designed rather than followed. The clones and course builds
+              that taught me the stack are still up on{' '}
+              <a
+                className="link-rule [background-size:100%_1px] text-[var(--color-mark)]"
+                href="https://github.com/prathibha97"
+                target="_blank"
+                rel="noreferrer"
+              >
+                GitHub
+              </a>
+              .
+            </p>
+
+            <div className="mt-20 space-y-24 md:space-y-32">
+              {projectsData.map((p, i) => (
+                <ProjectEntry key={p.title} project={p} index={i} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

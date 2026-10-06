@@ -1,131 +1,80 @@
-import LiveClock from '@/components/primitives/live-clock';
 import { profile } from '@/lib/data';
 import pkg from '@/package.json';
-import { Mail } from 'lucide-react';
-import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import Link from 'next/link';
 
 function buildInfo() {
   const sha =
-    process.env.VERCEL_GIT_COMMIT_SHA ||
-    process.env.NEXT_PUBLIC_COMMIT_SHA ||
-    'local';
-  const shortSha = sha.slice(0, 7);
-
+    process.env.VERCEL_GIT_COMMIT_SHA || process.env.NEXT_PUBLIC_COMMIT_SHA || 'local';
   const deployedAt =
     process.env.VERCEL_GIT_COMMIT_AUTHOR_DATE ||
     process.env.NEXT_PUBLIC_BUILD_TIME ||
     new Date().toISOString();
 
-  // Relative time, server-rendered (slight staleness is fine)
-  let rel = '';
-  try {
-    const diffMs = Date.now() - new Date(deployedAt).getTime();
-    const day = 24 * 60 * 60 * 1000;
-    const days = Math.round(diffMs / day);
+  let rel = '—';
+  const diffMs = Date.now() - new Date(deployedAt).getTime();
+  if (!Number.isNaN(diffMs)) {
+    const days = Math.round(diffMs / 86_400_000);
     if (days <= 0) rel = 'today';
-    else if (days === 1) rel = '1d ago';
-    else if (days < 30) rel = `${days}d ago`;
-    else if (days < 365) rel = `${Math.round(days / 30)}mo ago`;
-    else rel = `${Math.round(days / 365)}y ago`;
-  } catch {
-    rel = '—';
+    else if (days === 1) rel = 'yesterday';
+    else if (days < 30) rel = `${days} days ago`;
+    else if (days < 365) rel = `${Math.round(days / 30)} months ago`;
+    else rel = `${Math.round(days / 365)} years ago`;
   }
 
-  return { version: pkg.version, shortSha, rel };
+  return { version: pkg.version, shortSha: sha.slice(0, 7), rel };
 }
 
 export default function Footer() {
-  const year = new Date().getFullYear();
   const { version, shortSha, rel } = buildInfo();
-  return (
-    <footer className="relative border-t border-[var(--color-border)] bg-[var(--color-bg-2)]">
-      {/* Oversize wordmark */}
-      <div className="container-page py-20">
-        <div className="font-display text-[clamp(4rem,16vw,14rem)] leading-[0.85] tracking-tight text-[var(--color-fg)]">
-          Let&apos;s build
-          <br />
-          <span className="text-[var(--color-fg-subtle)]/40">something.</span>
-        </div>
-      </div>
 
-      <div className="container-page border-t border-[var(--color-border)] py-10">
-        <div className="grid gap-8 md:grid-cols-12">
-          <div className="md:col-span-6">
-            <div className="flex items-center gap-3">
-              <span className="relative grid h-8 w-8 place-items-center rounded-full bg-[var(--color-accent)] text-[var(--color-bg)] font-mono text-xs font-bold">
-                P
-                <span className="absolute inset-0 rounded-full ring-1 ring-[var(--color-accent)]/40 animate-pulse-dot" />
-              </span>
-              <span className="font-medium text-[var(--color-fg)]">{profile.name}</span>
-            </div>
-            <p className="mt-3 max-w-md text-sm text-[var(--color-fg-muted)]">
-              Senior software engineer based in {profile.location}. Currently leading engineering
-              on critical projects; open to senior roles in 2026 and taking freelance / contract work.
+  return (
+    <footer className="on-ink">
+      <div className="container-page py-16 md:py-24">
+        {/* The name, set once at size, as a sign-off. */}
+        <p className="display text-[clamp(2.5rem,9vw,7rem)] leading-[0.9]">{profile.name}</p>
+
+        <div className="mt-16 grid grid-cols-12 gap-x-6 gap-y-10">
+          <div className="col-span-12 sm:col-span-6 lg:col-span-4">
+            <p className="text-[0.9375rem] leading-[1.6] text-[#c6cad0]">
+              {profile.role}. {profile.availability}
+            </p>
+            <p className="t-meta mt-2">
+              {profile.workingStyle}. {profile.relocation}.
             </p>
           </div>
 
-          <div className="md:col-span-3">
-            <div className="label-eyebrow mb-3">Sitemap</div>
-            <ul className="space-y-2 text-sm text-[var(--color-fg-muted)]">
-              <li><Link className="hover:text-[var(--color-fg)] transition-colors" href="/#work">Work</Link></li>
-              <li><Link className="hover:text-[var(--color-fg)] transition-colors" href="/#about">About</Link></li>
-              <li><Link className="hover:text-[var(--color-fg)] transition-colors" href="/writing">Writing</Link></li>
-              <li><Link className="hover:text-[var(--color-fg)] transition-colors" href="/#contact">Contact</Link></li>
+          <div className="col-span-6 sm:col-span-3 lg:col-span-2 lg:col-start-7">
+            <h2 className="t-meta mb-2">Pages</h2>
+            <ul className="space-y-1 text-[0.9375rem]">
+              <li><Link className="link-rule" href="/#work">Work</Link></li>
+              <li><Link className="link-rule" href="/#about">About</Link></li>
+              <li><Link className="link-rule" href="/writing">Writing</Link></li>
+              <li><Link className="link-rule" href="/#contact">Contact</Link></li>
             </ul>
           </div>
 
-          <div className="md:col-span-3">
-            <div className="label-eyebrow mb-3">Elsewhere</div>
-            <ul className="space-y-2 text-sm text-[var(--color-fg-muted)]">
+          <div className="col-span-6 sm:col-span-3 lg:col-span-2">
+            <h2 className="t-meta mb-2">Elsewhere</h2>
+            <ul className="space-y-1 text-[0.9375rem]">
               <li>
-                <a className="inline-flex items-center gap-2 hover:text-[var(--color-fg)] transition-colors" href={profile.socials.github} target="_blank" rel="noreferrer">
-                  <FaGithub className="h-3.5 w-3.5" /> GitHub
-                </a>
+                <a className="link-rule" href={profile.socials.github} target="_blank" rel="noreferrer">GitHub</a>
               </li>
               <li>
-                <a className="inline-flex items-center gap-2 hover:text-[var(--color-fg)] transition-colors" href={profile.socials.linkedin} target="_blank" rel="noreferrer">
-                  <FaLinkedin className="h-3.5 w-3.5" /> LinkedIn
-                </a>
+                <a className="link-rule" href={profile.socials.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
               </li>
               <li>
-                <a className="inline-flex items-center gap-2 hover:text-[var(--color-fg)] transition-colors" href={`mailto:${profile.email}`}>
-                  <Mail className="h-3.5 w-3.5" /> Email
-                </a>
+                <a className="link-rule" href={`mailto:${profile.email}`}>Email</a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-[var(--color-border)] pt-6">
-          {/* Build info — mono, tabular, machine-precise */}
-          <div
-            className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--color-fg-subtle)]"
-            style={{ fontVariantNumeric: 'tabular-nums slashed-zero' }}
-          >
-            <span className="text-[var(--color-fg-muted)]">v{version}</span>
-            <span className="text-[var(--color-fg-subtle)]/40">·</span>
-            <span>deployed {rel}</span>
-            <span className="text-[var(--color-fg-subtle)]/40">·</span>
-            <span>
-              commit{' '}
-              <span className="text-[var(--color-fg-muted)] normal-case tracking-normal">
-                {shortSha}
-              </span>
-            </span>
-            <span className="text-[var(--color-fg-subtle)]/40">·</span>
-            <span className="inline-flex items-center gap-1.5">
-              <span className="relative grid h-1.5 w-1.5 place-items-center">
-                <span className="absolute inset-0 rounded-full bg-[var(--color-signal-live)] animate-pulse-dot" />
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-signal-live)]" />
-              </span>
-              LK <LiveClock className="text-[var(--color-fg-muted)]" />
-            </span>
-          </div>
-
-          {/* Copyright */}
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-fg-subtle)]/70">
-            © {year} {profile.name} · built with Next 15 · Motion · General Sans
+        <div className="mt-16 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-t border-white/15 pt-5">
+          <p className="t-meta">
+            © {new Date().getFullYear()} {profile.name}
+          </p>
+          <p className="t-meta">
+            v{version} · {shortSha} · deployed {rel}
           </p>
         </div>
       </div>
