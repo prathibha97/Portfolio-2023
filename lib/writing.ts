@@ -57,6 +57,9 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
     const raw = await fs.readFile(path.join(WRITING_DIR, `${slug}.mdx`), 'utf8');
     const { data, content } = matter(raw);
+    // getAllPosts filters drafts, but this path did not — an unfinished post
+    // was still readable by anyone who guessed its slug.
+    if (data.draft) return null;
     return {
       slug,
       title: data.title ?? slug,

@@ -1,0 +1,56 @@
+---
+title: 'Ship the first draft. Now do it with twenty engineers.'
+description: 'The rule that makes one developer fast is the rule that makes a team unsafe, unless you pay for it somewhere specific.'
+date: '2026-04-12'
+tags: ['engineering', 'process', 'go', 'testing']
+# Not rendered — a note to self.
+todo: >
+  Add real figures after the review paragraph if you have them: review
+  turnaround before and after the Testcontainers suite, or roughly what
+  share of what it catches would otherwise have reached production.
+---
+
+For the first two years of my career I polished things before showing them to anyone. A week on a demo nobody had asked to see. The work looked better than what my colleagues were delivering. It also was not in production, which meant it was worth nothing.
+
+So I learned the usual lesson, the one every engineer eventually writes a post about: merge the first draft, let reality grade it, polish after the thing exists. It worked. For one person it works almost unreasonably well.
+
+Then I became responsible for other people's code, and found out the rule does not survive the trip on its own.
+
+## Why it stops working
+
+When you are one engineer, "merge it and see" is cheap because you hold the whole system in your head. You know which paths are load-bearing. You know the thing you merged on Tuesday is the thing that broke on Thursday, because there is nobody else it could have been.
+
+At twenty engineers none of that holds. The same instruction — *ship the rough version, iterate in main* — now means twenty people merging rough versions into a system no single person understands, where the failure surfaces in someone else's service a week later. Told to a team without anything underneath it, "move fast" is not a culture. It is a request that somebody else absorb the risk.
+
+The usual correction is to slow down: heavier review, design docs, a staging soak, an approval. That works, and the cost is the thing you were fast about in the first place.
+
+I think the correction is wrong. The speed is not the problem. The problem is that solo speed is subsidised by context nobody else has, and if you want to keep the speed you have to replace that subsidy with something explicit.
+
+## What we replaced it with
+
+Integration tests, specifically the kind that run against the real dependency.
+
+Go's testing story makes the unit layer easy and it is not where the risk lives. The risk lives in the seam: the query that is valid SQL and wrong, the migration that works on an empty table, the message whose schema a consumer will not accept. Those are exactly the failures that a confident engineer merging a first draft will not catch, and exactly the ones that surface somewhere else.
+
+Testcontainers moved that seam into the test run. A real Postgres, a real broker, started per test, torn down after. It is slower than mocks and that is the entire point — it tests the thing that actually breaks rather than a hand-written impression of it.
+
+The effect on review was not subtle, and it was not mainly about catching bugs. It was that **review stopped being the place where correctness got decided**. A reviewer who has to mentally simulate your database interaction is slow, cautious and frequently wrong. A reviewer looking at a diff where the integration test already proves the interaction can spend attention on the things humans are good at: is this the right shape, will the next person understand it, does this name mean what it says.
+
+
+## The rules that survived
+
+Three of the four things I believed as a solo developer made the transition. One did not.
+
+**First draft is shippable — if the seam is covered.** The clause is doing all the work. Merge the rough version of the logic. Do not merge the rough version of the contract between two services.
+
+**No abstraction without three concrete uses.** This gets *more* true with more people, not less. A premature abstraction written by one engineer is a mistake they can undo. One adopted by twenty is a decision, and undoing it is a project.
+
+**Comments only for surprises.** Still true, with an addition I did not need alone: write down why you did *not* do the obvious thing. At twenty people, the second-most expensive code is the code someone rewrites into the exact form you already tried and rejected.
+
+The one that did not survive: **"demos are screenshots, not slide decks."** That is good advice for showing work to engineers and bad advice for showing work to anyone else. If the person on the other side of the table is accountable for a compliance decision, a screenshot of a working screen does not answer their question. Learning which audience needs which artifact was most of what changed about how I communicate.
+
+## The part I was wrong about
+
+I used to think the discipline that ships a one-person project is the same discipline that ships a six-person project, just with more handoffs.
+
+It is not. Solo, speed comes from carrying everything in your head. On a team, speed comes from the opposite — from making enough of it explicit that nobody needs to carry it. Those feel similar from the inside, because both look like merging quickly and not agonising. They are opposites, and treating the first as a scaled-down version of the second is how teams end up fast for about four months.

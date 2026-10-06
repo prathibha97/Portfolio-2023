@@ -1,0 +1,52 @@
+---
+title: 'Drawing boundaries across seventeen Go services'
+description: 'Service boundaries on a compliance platform, where the regulation decides your architecture before you do.'
+date: '2026-10-06'
+tags: ['go', 'architecture', 'microservices', 'kafka']
+draft: true
+---
+
+Most writing about service boundaries is written from first principles — bounded contexts, the single-responsibility principle, a diagram with tidy boxes. I want to write the version from the other side, where the boxes were already drawn by a regulator and my job was to find out which of my instincts survived contact with them.
+
+The platform does financial compliance: KYC, AML, fraud scoring, transaction monitoring. Seventeen Go services. Kafka between them. Kubernetes underneath, provisioned through Terraform.
+
+## Why compliance is different
+
+In most products you get to choose your boundaries and the cost of a bad one is refactoring. Here two constraints arrive before you write anything.
+
+The first is that **the audit trail is a product requirement, not an implementation detail**. A regulator can ask why a transaction was flagged in March and the answer has to be reconstructible — which inputs, which rule version, which decision, in order. That pushes you toward durable event logs early, and it means a service that cannot explain itself is not finished.
+
+The second is that **some boundaries are legal, not technical**. Which data can sit beside which other data is sometimes a jurisdiction question. When that is true, no amount of "but it would be simpler as one service" wins the argument.
+
+[This section needs your specifics. Which constraint actually bit first — retention, data residency, the reconstructability of a decision, something else? Naming the real one, with the real consequence, is what makes this post worth publishing rather than a summary of things people already assume.]
+
+## The boundary I drew wrong
+
+[The spine of the piece. Readers trust a post like this exactly as much as it is willing to admit. Pick one boundary you moved and walk through it:
+
+- what the original split was, and why it looked right at the time
+- what went wrong — chatty calls across the seam, a transaction that wanted to span two services, a shared table nobody would admit to, a deploy that could never go out alone
+- how you found out: an incident, a latency graph, or just the accumulated friction of every feature needing changes in both services
+- what you changed it to, and what the migration cost in time and risk
+
+If seventeen boundaries all held first time, that is a different and also publishable post — but say so plainly, because nobody will believe it by default.]
+
+## What Kafka changed
+
+Kafka is usually sold as decoupling. In practice it moves the coupling rather than removing it: services stop depending on each other's availability and start depending on each other's **event schemas**, which is a better trade but not a free one.
+
+The useful consequence for boundary-drawing is that the question changes. It stops being *who calls whom* and becomes *who owns this fact*. A service that emits an event is claiming to be the authority on something. If two services emit events about the same fact, you have found a boundary error, and you found it on a whiteboard instead of in production.
+
+[Worth one concrete example here: name an event, say which service owns it and which ones consume it, and say what you had to change when a consumer needed something the producer did not emit. Schema evolution in a system where old events must stay readable for audit is a genuinely hard problem that very few people write about from experience.]
+
+## Seventeen is a number, not an achievement
+
+I want to be careful here, because "we run seventeen microservices" is the kind of sentence that sounds like a flex and usually signals a distributed monolith.
+
+The test I use: **can this service be deployed on its own, and can it be understood on its own?** If shipping a change means coordinating two repositories, those are one service wearing two names. If understanding why a number is wrong means reading four services, the boundary is in the wrong place regardless of what the deployment topology says.
+
+[How many of the seventeen actually pass both tests? An honest count here, including the ones that do not and why you have not merged them yet, would do more for your credibility than any architecture diagram.]
+
+## What I would tell myself at the start
+
+[Three or four lines, in your own voice, of what you would do differently. Not general advice — the specific thing you now know about this platform that you did not know when you started. This is the paragraph people will quote.]

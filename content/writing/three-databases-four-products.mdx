@@ -1,0 +1,62 @@
+---
+title: 'Four products, three databases, and what each one actually cost'
+description: 'I shipped on MongoDB, MySQL and Postgres before I had an opinion about any of them. This is the bill.'
+date: '2026-02-28'
+tags: ['databases', 'postgres', 'mongodb']
+# Not rendered — a note to self.
+todo: >
+  Strongest addition: what actually happened with the audit log on the
+  employee system. Did records and audit entries drift? Caught in review,
+  testing or production? What was the fix — two-phase writes, a
+  reconciliation job, a migration? One concrete paragraph after the
+  "one failure you cannot ship" line. If it never broke, say so plainly:
+  "it held, and I still would not do it again" is a better ending than
+  implying a disaster that did not happen.
+---
+
+Most database posts are written by someone defending a choice they have never had to live with. I want to do the opposite, because the honest version of my opinion is that I picked wrong at least once and only understood why about a year later.
+
+Here is what I shipped, in order.
+
+**Employee Management** — an operations suite with an org chart, leave requests, project allocation and payroll — on MongoDB with Mongoose. **Commerce CMS and its storefront** on MySQL with Prisma. **Lingo**, a language-learning app with a full course-authoring suite, on Postgres with Drizzle. Now I write Go services against Postgres for a living.
+
+Same developer, three engines, four years. The differences were not where I expected.
+
+## The one that taught me something
+
+The employee system is the interesting case, because on paper Mongo was defensible. The shapes were document-ish. Employee records nest. Nobody wanted to write migrations on a deadline.
+
+Then the requirement arrived that every mutation had to write an audit record. Who changed this salary, when, from what, to what.
+
+That requirement is the whole argument, and it took me a while to see it. An audit trail is a promise that the record and the log agree. If the write succeeds and the audit entry does not, you have something worse than no audit trail: you have one that is quietly wrong, and no way to find out which rows are lying. In a payroll surface, that is the one failure you cannot ship.
+
+Postgres hands you that promise in one word. Both writes go in a transaction, both land or neither does, and the question never comes up again. Without it you are writing the guarantee yourself, in application code, on every path that touches the record — and you are doing it correctly forever, including in the code paths you add next year when you have forgotten the rule exists.
+
+
+## What I got wrong about schemas
+
+I used to think a schema was a tax you paid up front for a benefit you collected later. That framing is backwards, and it is why "schemaless is faster to start" sounds true.
+
+The schema does not go away when you drop it. It moves. It ends up distributed across every handler that reads the collection, as a set of assumptions nobody wrote down — this field is always present, this array is never empty, this is a string except in rows written before March. Mongoose gives you a schema in the application layer, which helps, right up to the first script, migration or second service that writes to the same collection without going through your models.
+
+So the real choice is not *schema or no schema*. It is *one schema the database enforces, or many schemas each caller believes in*. The second option is not cheaper. It just bills later, and it bills in debugging rather than in typing.
+
+## Where Mongo still wins, honestly
+
+I am not interested in the version of this post where one engine wins everything.
+
+- **Genuinely fluid document shapes.** CMS content, event payloads, third-party API responses you are storing before you understand them. If you truly cannot name the fields, do not pretend you can.
+- **A team that already knows it.** Familiarity beats theory. A team that is fast and careful in Mongo will out-ship a team learning Postgres while under deadline, and that is not close.
+- **Document-shaped reads at scale**, where you would otherwise be assembling the same object from six joins on every request.
+
+What changed for me is the default, not the rule. Mongo now has to win an argument. It used to win by showing up.
+
+## The question I ask now
+
+When someone asks me to pick, I ask one thing back:
+
+> Does your data have relationships you would describe out loud with the words *belongs to*?
+
+If yes, Postgres. If you have to stop and think, Postgres — hesitation means the relationships exist and you have not modelled them yet. If genuinely no, either works, so use whichever your team is faster in.
+
+The honest reason I default to Postgres is not that it is better in the abstract. It is that over four years, the cases where Mongo would have been the right call were rare, and the cases where I wanted a transaction were constant.
